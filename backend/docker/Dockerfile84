@@ -53,6 +53,9 @@ RUN chmod 755 /var/www/html/webroot/files
 COPY backend/source/composer.json /var/www/html/
 COPY backend/source/composer.json /var/www/html/
 
+RUN composer install --no-interaction -d /var/www/html
+
+
 RUN mkdir /var/www/html/tmp
 RUN mkdir /var/www/html/tmp/cache
 RUN mkdir /var/www/html/tmp/cache/models
