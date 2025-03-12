@@ -22,7 +22,6 @@ if (!defined('STDIN')) {
 
 use Cake\Codeception\Console\Installer as CodeceptionInstaller;
 use Cake\Utility\Security;
-use Composer\IO\IOInterface;
 use Composer\Script\Event;
 use Exception;
 
@@ -34,8 +33,6 @@ class Installer
 {
     /**
      * An array of directories to be made writable
-     *
-     * @var list<string>
      */
     public const WRITABLE_DIRS = [
         'logs',
@@ -55,11 +52,11 @@ class Installer
      * @throws \Exception Exception raised by validator.
      * @return void
      */
-    public static function postInstall(Event $event): void
+    public static function postInstall(Event $event)
     {
         $io = $event->getIO();
 
-        $rootDir = dirname(__DIR__, 2);
+        $rootDir = dirname(dirname(__DIR__));
 
         static::createAppLocalConfig($rootDir, $io);
         static::createWritableDirectories($rootDir, $io);
@@ -79,7 +76,7 @@ class Installer
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
      * @return void
      */
-    public static function createAppLocalConfig(string $dir, IOInterface $io): void
+    public static function createAppLocalConfig($dir, $io)
     {
         $appLocalConfig = $dir . '/config/app_local.php';
         $appLocalConfigTemplate = $dir . '/config/app_local.example.php';
@@ -96,7 +93,7 @@ class Installer
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
      * @return void
      */
-    public static function createWritableDirectories(string $dir, IOInterface $io): void
+    public static function createWritableDirectories($dir, $io)
     {
         foreach (static::WRITABLE_DIRS as $path) {
             $path = $dir . '/' . $path;
@@ -116,11 +113,11 @@ class Installer
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
      * @return void
      */
-    public static function setFolderPermissions(string $dir, IOInterface $io): void
+    public static function setFolderPermissions($dir, $io)
     {
         // ask if the permissions should be changed
         if ($io->isInteractive()) {
-            $validator = function (string $arg): string {
+            $validator = function ($arg) {
                 if (in_array($arg, ['Y', 'y', 'N', 'n'])) {
                     return $arg;
                 }
@@ -139,7 +136,7 @@ class Installer
         }
 
         // Change the permissions on a path and output the results.
-        $changePerms = function (string $path) use ($io): void {
+        $changePerms = function ($path) use ($io) {
             $currentPerms = fileperms($path) & 0777;
             $worldWritable = $currentPerms | 0007;
             if ($worldWritable == $currentPerms) {
@@ -154,8 +151,7 @@ class Installer
             }
         };
 
-        $walker = function (string $dir) use (&$walker, $changePerms): void {
-            /** @phpstan-ignore-next-line */
+        $walker = function ($dir) use (&$walker, $changePerms) {
             $files = array_diff(scandir($dir), ['.', '..']);
             foreach ($files as $file) {
                 $path = $dir . '/' . $file;
@@ -181,7 +177,7 @@ class Installer
      * @param \Composer\IO\IOInterface $io IO interface to write to console.
      * @return void
      */
-    public static function setSecuritySalt(string $dir, IOInterface $io): void
+    public static function setSecuritySalt($dir, $io)
     {
         $newKey = hash('sha256', Security::randomBytes(64));
         static::setSecuritySaltInFile($dir, $io, $newKey, 'app_local.php');
@@ -196,12 +192,11 @@ class Installer
      * @param string $file A path to a file relative to the application's root
      * @return void
      */
-    public static function setSecuritySaltInFile(string $dir, IOInterface $io, string $newKey, string $file): void
+    public static function setSecuritySaltInFile($dir, $io, $newKey, $file)
     {
         $config = $dir . '/config/' . $file;
         $content = file_get_contents($config);
 
-        /** @phpstan-ignore-next-line */
         $content = str_replace('__SALT__', $newKey, $content, $count);
 
         if ($count == 0) {
@@ -228,11 +223,10 @@ class Installer
      * @param string $file A path to a file relative to the application's root
      * @return void
      */
-    public static function setAppNameInFile(string $dir, IOInterface $io, string $appName, string $file): void
+    public static function setAppNameInFile($dir, $io, $appName, $file)
     {
         $config = $dir . '/config/' . $file;
         $content = file_get_contents($config);
-        /** @phpstan-ignore-next-line */
         $content = str_replace('__APP_NAME__', $appName, $content, $count);
 
         if ($count == 0) {

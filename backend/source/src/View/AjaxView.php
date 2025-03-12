@@ -30,7 +30,7 @@ class AjaxView extends AppView
      *
      * @var string
      */
-    protected string $layout = 'ajax';
+    public $layout = 'ajax';
 
     /**
      * Initialization hook method.
