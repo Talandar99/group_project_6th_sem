@@ -1,0 +1,83 @@
+FROM php:8.1-apache
+
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get update && apt-get install -y libpq-dev
+RUN docker-php-ext-install pdo pdo_pgsql
+RUN docker-php-ext-install exif
+
+RUN apt-get update && \
+    apt-get install -y libxml2-dev
+RUN docker-php-ext-install soap
+
+RUN a2enmod ssl && a2enmod rewrite
+
+RUN mkdir -p /etc/apache2/ssl
+COPY backend/docker//*.pem /etc/apache2/ssl/
+COPY backend/docker/000-default.conf /etc/apache2/sites-available/000-default.conf
+
+RUN apt-get update -y && apt-get install -y sendmail libpng-dev
+
+RUN apt-get install -y \
+        libzip-dev \
+        zip \
+  && docker-php-ext-install zip
+  
+RUN apt-get -y update \
+&& apt-get install -y libpq-dev libicu-dev \
+&& docker-php-ext-configure intl \
+&& docker-php-ext-install intl \
+&& docker-php-ext-install pdo pdo_pgsql
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN apt-get update -y && apt-get install -y sendmail libpng-dev libfreetype6-dev libjpeg62-turbo-dev libgd-dev libpng-dev libwebp-dev
+RUN docker-php-ext-configure gd \ 
+--with-webp \
+--with-freetype=/usr/include/ \ 
+--with-jpeg=/usr/include/
+RUN docker-php-ext-install gd
+RUN apt-get install -y \
+        libzip-dev \
+        zip \
+  && docker-php-ext-install zip
+  
+RUN cd /usr/local/etc/php/conf.d/ && \
+  echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
+
+RUN rm -rf /var/www/html/webroot/files
+RUN mkdir -p /var/www/html/webroot/files
+RUN chown -R www-data:www-data /var/www/html/webroot/files
+RUN chmod 755 /var/www/html/webroot/files
+
+COPY backend/source/composer.json /var/www/html/
+COPY backend/source/composer.json /var/www/html/
+
+RUN composer install --no-interaction -d /var/www/html
+
+
+RUN mkdir /var/www/html/tmp
+RUN mkdir /var/www/html/tmp/cache
+RUN mkdir /var/www/html/tmp/cache/models
+RUN mkdir /var/www/html/tmp/persistent
+RUN mkdir /var/www/html/tmp/views
+RUN mkdir /var/www/html/tmp/sessions
+RUN mkdir /var/www/html/tmp/tests
+RUN chmod 757 /var/www/html/tmp
+RUN chmod 757 /var/www/html/tmp/cache
+RUN chmod 757 /var/www/html/tmp/cache/models
+RUN chmod 757 /var/www/html/tmp/persistent
+RUN chmod 757 /var/www/html/tmp/views
+RUN chmod 757 /var/www/html/tmp/sessions
+RUN chmod 757 /var/www/html/tmp/tests
+
+RUN mkdir /var/www/html/webroot/invoices
+RUN chmod 757 /var/www/html/webroot/invoices
+
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
+
+RUN echo "max_execution_time=900" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+EXPOSE 80
+EXPOSE 443
