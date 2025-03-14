@@ -165,6 +165,14 @@ class UsersController extends AppController
      *         )
      *     )
      * )
+     *
+     * @OA\SecurityScheme(
+     *     securityScheme="bearerAuth",
+     *     type="http",
+     *     scheme="bearer",
+     *     bearerFormat="JWT",
+     *     description="Wprowadź token JWT uzyskany podczas logowania."
+     * )
      */
     public function logout()
     {
