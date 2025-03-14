@@ -29,14 +29,7 @@ use Cake\Controller\Controller;
 class AppController extends Controller
 {
 
-    /**
-     * @SWG\Info(
-     *     title="Test api plik AppControler",
-     *     version="1.0.0",
-     *     description="A brief description of your API"
-     * )
-    */
-
+    
     /**
      * Initialization hook method.
      *

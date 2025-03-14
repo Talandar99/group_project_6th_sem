@@ -4,8 +4,8 @@ use Cake\Core\Configure;
 return [
     'Swagger' => [
         'ui' => [
-            'title' => 'Swagger',
-            'validator' => false,
+            'title' => 'ALT3 Swagger',
+            'validator' => true,
             'api_selector' => true,
             'route' => '/swagger/',
             'schemes' => ['http', 'https']

@@ -6,11 +6,14 @@
     "license": "MIT",
     "require": {
         "php": ">=7.4",
-        "alt3/cakephp-swagger": "^4.0",
+        "cakephp/authentication": "^2.11",
         "cakephp/cakephp": "^4.5.0",
         "cakephp/migrations": "^3.7",
         "cakephp/plugin-installer": "^1.3",
-        "mobiledetect/mobiledetectlib": "^3.74"
+        "doctrine/annotations": "^2.0",
+        "firebase/php-jwt": "^6.11",
+        "mobiledetect/mobiledetectlib": "^3.74",
+        "zircote/swagger-php": "^5.0"
     },
     "require-dev": {
         "cakephp/bake": "^2.8",
