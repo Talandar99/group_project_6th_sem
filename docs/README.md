@@ -1,10 +1,4 @@
 # Docs
-## Running docker container for backend
-### Windows
-```sh
-.\scripts\setupdocker_backend.bat
-```
-### Linux
-```sh
-./scripts/setupdocker_backend.sh
-```
+- [Running backend](./RUNNING_BACKEND.md)
+- [Flutter](./FLUTTER.md)
+- [Git](./GIT.md)
