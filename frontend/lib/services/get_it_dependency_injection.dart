@@ -6,7 +6,5 @@ import 'package:get_it/get_it.dart';
 void setupDependencyInjection(navigatorKey) {
   GetIt.I.registerLazySingleton<ApiService>(() => ApiService());
   GetIt.I.registerLazySingleton<PersistentStorage>(() => PersistentStorage());
-  GetIt.I.registerLazySingleton<LoginConnectionService>(
-    () => LoginConnectionService(),
-  );
+  GetIt.I.registerLazySingleton<UserConnection>(() => UserConnection());
 }
