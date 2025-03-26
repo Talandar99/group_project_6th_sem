@@ -1,11 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:frontend/services/get_it_dependency_injection.dart';
+import 'package:frontend/services/login_connection.dart';
+import 'package:frontend/services/persistant_storage.dart';
+import 'package:frontend/web_api/dto/email_password.dart';
+import 'package:frontend/web_api/http_override.dart';
+import 'package:get_it/get_it.dart';
 
 void main() {
-  runApp(const MyApp());
+  HttpOverrides.global = MyHttpOverrides();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  MyApp({super.key}) {
+    setupDependencyInjection(navigatorKey);
+  }
 
   // This widget is the root of your application.
   @override
@@ -37,16 +49,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -54,16 +56,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final LoginConnectionService loginConnectionService =
+      GetIt.I<LoginConnectionService>();
+  final PersistentStorage persistentStorage = GetIt.I<PersistentStorage>();
   int _counter = 0;
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      var x = loginConnectionService.login(
+        EmailPasswordDto(
+          email: "user@example.com",
+          password: "securepassword123",
+        ),
+      );
+      print(x);
+      print(x);
+      print(x);
+      print(x);
+      //_counter++;
     });
   }
 
