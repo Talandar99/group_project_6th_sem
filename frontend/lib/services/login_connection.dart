@@ -16,13 +16,13 @@ class LoginConnectionService {
       '$apiHost/users/login',
       emailPasswordDto,
     );
-    print("-----------------------------------------");
     print(response.statusCode);
-    print(response.body.toString());
-    print("-----------------------------------------");
     if (response.statusCode == 200) {
       var decodedBody = json.decode(response.body);
 
+      print("-----------------------------------------");
+      print(response.body.toString());
+      print("-----------------------------------------");
       var token = TokenDto.fromJson(decodedBody);
       persistentStorage.saveData(StorageKeys.apiToken, token.token.toString());
 

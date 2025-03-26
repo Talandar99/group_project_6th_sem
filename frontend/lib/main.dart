@@ -69,10 +69,10 @@ class _MyHomePageState extends State<MyHomePage> {
           password: "securepassword123",
         ),
       );
+
+      print("token");
       print(x);
-      print(x);
-      print(x);
-      print(x);
+      print("token");
       //_counter++;
     });
   }
