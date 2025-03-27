@@ -9,8 +9,8 @@ import '../widgets/remember_me_forgot_password.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/create_account_button.dart';
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class Register extends StatelessWidget {
+  const Register({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +30,10 @@ class Login extends StatelessWidget {
                   constraints: BoxConstraints(maxWidth: 400),
                   child: Column(
                     children: [
-                      //Logo with custom text
+                      //Logo
                       const LogoSection(
-                        title: 'Witaj ponownie!',
-                        subtitle: 'Zaloguj się na swoje konto, aby móc w pełni korzystać z aplikacji.',
+                        title: 'Załóż konto!',
+                        subtitle: 'Załóż swoje konto, aby móc w pełni korzystać z aplikacji.',
                       ),
 
                       //Form
@@ -48,23 +48,15 @@ class Login extends StatelessWidget {
 
                               //Password
                               const PasswordField(),
-                              const SizedBox(height: 8),
-
-                              //Forgot password + Remember me
-                              const RememberMeForgotPassword(),
                               const SizedBox(height: 16),
 
-                              //Sign in button with custom text
+                              //Sign in button
                               CustomButton(
-                                text: 'Zaloguj się',
+                                text: 'Załóż konto',
                                 onPressed: () {
-                                  // Login here and navigate to the home page
+                                  // Register here and navigate to the home page
                                 },
                               ),
-                              const SizedBox(height: 16),
-
-                              //Create account button
-                              const CreateAccountButton(),
                               const SizedBox(height: 16),
                             ],
                           ),
