@@ -12,18 +12,12 @@ class UserConnection {
   final PersistentStorage persistentStorage = GetIt.I<PersistentStorage>();
 
   Future<int> register(EmailPasswordDto emailPasswordDto) async {
-    var response = await apiService.postWithoutToken(
-      '$apiHost/users/register',
-      emailPasswordDto,
-    );
+    var response = await apiService.postWithoutToken('$apiHost/users/register', emailPasswordDto);
     return response.statusCode;
   }
 
   Future<TokenDto> login(EmailPasswordDto emailPasswordDto) async {
-    var response = await apiService.postWithoutToken(
-      '$apiHost/users/login',
-      emailPasswordDto,
-    );
+    var response = await apiService.postWithoutToken('$apiHost/users/login', emailPasswordDto);
     if (response.statusCode == 200) {
       var decodedBody = json.decode(response.body);
       var token = TokenDto.fromJson(decodedBody);
