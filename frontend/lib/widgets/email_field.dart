@@ -10,9 +10,7 @@ class EmailField extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.email, color: AppColors.iconColor),
         labelText: 'Email',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
   }

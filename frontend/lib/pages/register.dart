@@ -33,31 +33,31 @@ class Register extends StatelessWidget {
                       //Logo
                       const LogoSection(
                         title: 'Załóż konto!',
-                        subtitle: 'Załóż swoje konto, aby móc w pełni korzystać z aplikacji.',
+                        subtitle:
+                            'Załóż swoje konto, aby móc w pełni korzystać z aplikacji.',
                       ),
-
-                      //Form
                       Form(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 32),
                           child: Column(
                             children: [
-                              //Email
-                              const EmailField(),
-                              const SizedBox(height: 16),
-
-                              //Password
-                              const PasswordField(),
-                              const SizedBox(height: 16),
-
-                              //Sign in button
-                              CustomButton(
-                                text: 'Załóż konto',
-                                onPressed: () {
-                                  // Register here and navigate to the home page
-                                },
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 16),
+                                child: EmailField(),
                               ),
-                              const SizedBox(height: 16),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 16),
+                                child: PasswordField(),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 16),
+                                child: CustomButton(
+                                  text: 'Załóż konto',
+                                  onPressed: () {
+                                    // Register here and navigate to the home page
+                                  },
+                                ),
+                              ),
                             ],
                           ),
                         ),

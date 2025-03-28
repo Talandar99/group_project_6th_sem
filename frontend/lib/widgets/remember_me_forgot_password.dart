@@ -13,7 +13,11 @@ class RememberMeForgotPassword extends StatelessWidget {
         //Remember me
         Row(
           children: [
-            Checkbox(value: false, onChanged: (value) {}, activeColor: AppColors.primary),
+            Checkbox(
+              value: false,
+              onChanged: (value) {},
+              activeColor: AppColors.primary,
+            ),
             Text('Zapamiętaj mnie', style: AppTextStyles.body),
           ],
         ),

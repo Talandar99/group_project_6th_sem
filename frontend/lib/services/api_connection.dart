@@ -62,9 +62,7 @@ class ApiService {
   ) async {
     return http.post(
       Uri.parse(uri),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode(toJsonDto.toJson()),
     );
   }

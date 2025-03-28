@@ -12,7 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,11 +22,13 @@ class _HomePageState extends State<HomePage> {
           final isWideScreen = constraints.maxWidth > 600; // Adjust for PC
           return ListView(
             padding: EdgeInsets.symmetric(
-              horizontal: isWideScreen ? constraints.maxWidth * 0.2 : 20, // Wider padding for PC
+              horizontal:
+                  isWideScreen
+                      ? constraints.maxWidth * 0.2
+                      : 20, // Wider padding for PC
             ),
             children: [
-              _searchField(),
-              SizedBox(height: 40),
+              Padding(padding: EdgeInsets.only(bottom: 40), child: _searchField()),
             ],
           );
         },
@@ -40,11 +41,7 @@ class _HomePageState extends State<HomePage> {
       margin: EdgeInsets.only(top: 40),
       decoration: BoxDecoration(
         boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 40,
-            spreadRadius: 0,
-          )
+          BoxShadow(color: AppColors.shadow, blurRadius: 40, spreadRadius: 0),
         ],
       ),
       child: TextField(
@@ -89,17 +86,12 @@ class _HomePageState extends State<HomePage> {
 
   AppBar appBar() {
     return AppBar(
-      title: Text(
-        'Sklep',
-        style: AppTextStyles.appBarTitle,
-      ),
+      title: Text('Sklep', style: AppTextStyles.appBarTitle),
       backgroundColor: AppColors.white,
       elevation: 0,
       centerTitle: true,
       leading: GestureDetector(
-        onTap: () {
-          
-        },
+        onTap: () {},
         child: Container(
           margin: EdgeInsets.all(10),
           alignment: Alignment.center,
@@ -111,24 +103,26 @@ class _HomePageState extends State<HomePage> {
             'assets/icons/Arrow - Left 2.svg',
             height: 20,
             width: 20,
-            ),
+          ),
         ),
       ),
       actions: [
         GestureDetector(
           onTap: () {
-            Navigator.push(context, 
-              MaterialPageRoute(builder: (context) => Login()));
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Login()),
+            );
           },
           child: Container(
-          margin: EdgeInsets.all(10),
-          alignment: Alignment.center,
-          width: 37,
-          decoration: BoxDecoration(
-            color: AppColors.iconBackground,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(Icons.person, color: AppColors.iconColor),
+            margin: EdgeInsets.all(10),
+            alignment: Alignment.center,
+            width: 37,
+            decoration: BoxDecoration(
+              color: AppColors.iconBackground,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(Icons.person, color: AppColors.iconColor),
           ),
         ),
       ],

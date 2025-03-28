@@ -30,42 +30,41 @@ class Login extends StatelessWidget {
                   constraints: BoxConstraints(maxWidth: 400),
                   child: Column(
                     children: [
-                      //Logo with custom text
                       const LogoSection(
                         title: 'Witaj ponownie!',
-                        subtitle: 'Zaloguj się na swoje konto, aby móc w pełni korzystać z aplikacji.',
+                        subtitle:
+                            'Zaloguj się na swoje konto, aby móc w pełni korzystać z aplikacji.',
                       ),
-
-                      //Form
                       Form(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 32),
                           child: Column(
                             children: [
-                              //Email
-                              const EmailField(),
-                              const SizedBox(height: 16),
-
-                              //Password
-                              const PasswordField(),
-                              const SizedBox(height: 8),
-
-                              //Forgot password + Remember me
-                              const RememberMeForgotPassword(),
-                              const SizedBox(height: 16),
-
-                              //Sign in button with custom text
-                              CustomButton(
-                                text: 'Zaloguj się',
-                                onPressed: () {
-                                  // Login here and navigate to the home page
-                                },
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 16),
+                                child: EmailField(),
                               ),
-                              const SizedBox(height: 16),
-
-                              //Create account button
-                              const CreateAccountButton(),
-                              const SizedBox(height: 16),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: PasswordField(),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 16),
+                                child: RememberMeForgotPassword(),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 16),
+                                child: CustomButton(
+                                  text: 'Zaloguj się',
+                                  onPressed: () {
+                                    // Login here and navigate to the home page
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 16),
+                                child: CreateAccountButton(),
+                              ),
                             ],
                           ),
                         ),

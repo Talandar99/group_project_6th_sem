@@ -31,9 +31,7 @@ class _PasswordFieldState extends State<PasswordField> {
           ),
           onPressed: _togglePasswordVisibility,
         ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
   }

@@ -6,31 +6,17 @@ class LogoSection extends StatelessWidget {
   final String title;
   final String subtitle;
 
-  const LogoSection({
-    super.key,
-    required this.title,
-    required this.subtitle,
-  });
+  const LogoSection({super.key, required this.title, required this.subtitle});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          Icons.android,
-          size: 100,
-          color: AppColors.primary,
-        ),
-        Text(
-          title,
-          style: AppTextStyles.heading,
-        ),
+        Icon(Icons.android, size: 100, color: AppColors.primary),
+        Text(title, style: AppTextStyles.heading),
         const SizedBox(height: 8),
-        Text(
-          subtitle,
-          style: AppTextStyles.subheading,
-        ),
+        Text(subtitle, style: AppTextStyles.subheading),
       ],
     );
   }
