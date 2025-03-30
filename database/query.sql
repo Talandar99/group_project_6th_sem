@@ -7,18 +7,6 @@ CREATE TABLE users (
 );
 
 
-INSERT INTO users (email, password) VALUES
-('amadeusz@sklep.pl', 'password'),
-('grzegorz@sklep.pl', 'password'),
-('mikolaj@sklep.pl', 'password'),
-('katarzyna@sklep.pl', 'password'),
-('aleksandra@sklep.pl', 'password'),
-('dawid@sklep.pl', 'password'),
-('klaudia@sklep.pl', 'password');
-
-
-
-
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     product_name VARCHAR(255) NOT NULL,
