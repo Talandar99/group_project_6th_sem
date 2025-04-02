@@ -12,7 +12,10 @@ class CreateAccountButton extends StatelessWidget {
       height: 50,
       child: OutlinedButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Register()));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Register()),
+          );
         },
         child: Text('Załóż konto', style: AppTextStyles.link),
       ),

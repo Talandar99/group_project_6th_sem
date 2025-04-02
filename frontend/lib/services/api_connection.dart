@@ -56,10 +56,15 @@ class ApiService {
     );
   }
 
-  Future<http.Response> postWithoutToken(String uri, DtoToJsonInterface toJsonDto) async {
+  Future<http.Response> postWithoutToken(
+    String uri,
+    DtoToJsonInterface toJsonDto,
+  ) async {
     return http.post(
       Uri.parse(uri),
-      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
       body: jsonEncode(toJsonDto.toJson()),
     );
   }

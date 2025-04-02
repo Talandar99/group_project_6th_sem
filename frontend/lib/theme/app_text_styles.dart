@@ -38,5 +38,8 @@ class AppTextStyles {
     color: AppColors.iconColor,
   );
 
-  static const TextStyle hint = TextStyle(fontSize: 14, color: Color(0xffDDDADA));
+  static const TextStyle hint = TextStyle(
+    fontSize: 14,
+    color: Color(0xffDDDADA),
+  );
 }
