@@ -49,6 +49,14 @@ return function (RouteBuilder $routes): void {
      */
     $routes->setRouteClass(DashedRoute::class);
 
+    
+    $routes->connect('/products/edit/:id', ['controller' => 'Products', 'action' => 'edit', '_method' => 'PUT'])
+    ->setPass(['id'])
+    ->setPatterns(['id' => '\d+']);
+    $routes->connect('/products/delete/:id', ['controller' => 'Products', 'action' => 'delete', '_method' => 'DELETE'])
+    ->setPass(['id'])
+    ->setPatterns(['id' => '\d+']);
+
     $routes->scope('/', function (RouteBuilder $builder): void {
         /*
          * Here, we are connecting '/' (base path) to a controller called 'Pages',

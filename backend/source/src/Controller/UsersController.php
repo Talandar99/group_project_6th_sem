@@ -58,6 +58,7 @@ class UsersController extends AppController
             $this->set([
                 'success' => true,
                 'token' => $token,
+                // 'message' => $user
             ]);
         } else {
             $this->response = $this->response->withStatus(401);
@@ -147,6 +148,84 @@ class UsersController extends AppController
         $this->viewBuilder()->setOption('serialize', ['success', 'errors', 'message']);
     }
 
+    /**
+     * @OA\Put(
+     *     path="/users/edit",
+     *     summary="Edycja danych użytkownika",
+     *     description="Endpoint umożliwia edycję danych zalogowanego użytkownika.",
+     *     tags={"Users"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email"},
+     *             @OA\Property(property="email", type="string", example="new_user@example.com"),
+     *             @OA\Property(property="password", type="string", example="newsecurepassword123")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Dane użytkownika zostały zaktualizowane",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Dane zostały zaktualizowane pomyślnie")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Błąd podczas aktualizacji danych",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Nie udało się zaktualizować danych użytkownika"),
+     *             @OA\Property(property="errors", type="object", example={
+     *                 "email": {"Podany adres email jest już zajęty"},
+     *                 "password": {"Hasło musi mieć co najmniej 8 znaków"}
+     *             })
+     *         )
+     *     )
+     * )
+     */
+    public function edit() {
+        $this->request->allowMethod(['put', 'patch']); // Akceptujemy PUT i PATCH
+
+        // Uzyskaj aktualnie zalogowanego użytkownika
+        $identity = $this->Authentication->getIdentity();
+        
+        if (!$identity) {
+            $this->response = $this->response->withStatus(401);
+            $this->set([
+                'success' => false,
+                'message' => 'Nie jesteś zalogowany',
+            ]);
+            return;
+        }
+
+        // Pobierz dane z żądania
+        $data = $this->request->getData();
+
+        // Załaduj dane do aktualnie zalogowanego użytkownika
+        $userId = $identity->getIdentifier();
+        $user = $this->Users->get($userId);
+        $user = $this->Users->patchEntity($user, $data);
+
+        // Zapisz zmiany w bazie danych
+        if ($this->Users->save($user)) {
+            $this->set([
+                'success' => true,
+                'message' => 'Dane zostały zaktualizowane pomyślnie',
+            ]);
+        } else {
+            $this->response = $this->response->withStatus(400);
+            $this->set([
+                'success' => false,
+                'message' => 'Nie udało się zaktualizować danych użytkownika',
+                'errors' => $user->getErrors(),
+            ]);
+        }
+
+        $this->viewBuilder()->setOption('serialize', ['success', 'message', 'errors']);
+    }
+
 
     /**
      * @OA\Post(
@@ -176,6 +255,7 @@ class UsersController extends AppController
      */
     public function logout()
     {
+        $this->request->allowMethod(['post']);
         $this->Authentication->logout();
         $this->set([
             'success' => true,
