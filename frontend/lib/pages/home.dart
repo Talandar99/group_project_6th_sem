@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:frontend/pages/login.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
+import '../widgets/custom_app_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,16 +16,32 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
+      appBar: CustomAppBar(
+        title: 'Sklep',
+        onProfileTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Login()),
+          );
+        },
+        onBackTap: () {
+          // back button if needed?
+        },
+      ),
       backgroundColor: AppColors.white,
       body: LayoutBuilder(
         builder: (context, constraints) {
-          final isWideScreen = constraints.maxWidth > 600; // Adjust for PC
+          final isWideScreen = constraints.maxWidth > 600;
           return ListView(
             padding: EdgeInsets.symmetric(
-              horizontal: isWideScreen ? constraints.maxWidth * 0.2 : 20, // Wider padding for PC
+              horizontal: isWideScreen ? constraints.maxWidth * 0.2 : 20,
             ),
-            children: [Padding(padding: EdgeInsets.only(bottom: 40), child: _searchField())],
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: 40),
+                child: _searchField(),
+              ),
+            ],
           );
         },
       ),
@@ -35,7 +52,9 @@ class _HomePageState extends State<HomePage> {
     return Container(
       margin: EdgeInsets.only(top: 40),
       decoration: BoxDecoration(
-        boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 40, spreadRadius: 0)],
+        boxShadow: [
+          BoxShadow(color: AppColors.shadow, blurRadius: 40, spreadRadius: 0),
+        ],
       ),
       child: TextField(
         decoration: InputDecoration(
@@ -74,44 +93,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-    );
-  }
-
-  AppBar appBar() {
-    return AppBar(
-      title: Text('Sklep', style: AppTextStyles.appBarTitle),
-      backgroundColor: AppColors.white,
-      elevation: 0,
-      centerTitle: true,
-      leading: GestureDetector(
-        onTap: () {},
-        child: Container(
-          margin: EdgeInsets.all(10),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: AppColors.iconBackground,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: SvgPicture.asset('assets/icons/Arrow - Left 2.svg', height: 20, width: 20),
-        ),
-      ),
-      actions: [
-        GestureDetector(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-          },
-          child: Container(
-            margin: EdgeInsets.all(10),
-            alignment: Alignment.center,
-            width: 37,
-            decoration: BoxDecoration(
-              color: AppColors.iconBackground,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(Icons.person, color: AppColors.iconColor),
-          ),
-        ),
-      ],
     );
   }
 }
