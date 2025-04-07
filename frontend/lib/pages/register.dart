@@ -33,15 +33,22 @@ class Register extends StatelessWidget {
                       //Logo
                       const LogoSection(
                         title: 'Załóż konto!',
-                        subtitle: 'Załóż swoje konto, aby móc w pełni korzystać z aplikacji.',
+                        subtitle:
+                            'Załóż swoje konto, aby móc w pełni korzystać z aplikacji.',
                       ),
                       Form(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 32),
                           child: Column(
                             children: [
-                              Padding(padding: EdgeInsets.only(bottom: 16), child: EmailField()),
-                              Padding(padding: EdgeInsets.only(bottom: 16), child: PasswordField()),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 16),
+                                child: EmailField(),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 16),
+                                child: PasswordField(),
+                              ),
                               Padding(
                                 padding: EdgeInsets.only(bottom: 16),
                                 child: CustomButton(

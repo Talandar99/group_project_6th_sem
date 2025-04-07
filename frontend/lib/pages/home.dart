@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/pages/login.dart';
+import 'package:frontend/pages/profile.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
@@ -22,9 +23,17 @@ class _HomePageState extends State<HomePage> {
           final isWideScreen = constraints.maxWidth > 600; // Adjust for PC
           return ListView(
             padding: EdgeInsets.symmetric(
-              horizontal: isWideScreen ? constraints.maxWidth * 0.2 : 20, // Wider padding for PC
+              horizontal:
+                  isWideScreen
+                      ? constraints.maxWidth * 0.2
+                      : 20, // Wider padding for PC
             ),
-            children: [Padding(padding: EdgeInsets.only(bottom: 40), child: _searchField())],
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: 40),
+                child: _searchField(),
+              ),
+            ],
           );
         },
       ),
@@ -35,7 +44,9 @@ class _HomePageState extends State<HomePage> {
     return Container(
       margin: EdgeInsets.only(top: 40),
       decoration: BoxDecoration(
-        boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 40, spreadRadius: 0)],
+        boxShadow: [
+          BoxShadow(color: AppColors.shadow, blurRadius: 40, spreadRadius: 0),
+        ],
       ),
       child: TextField(
         decoration: InputDecoration(
@@ -84,7 +95,12 @@ class _HomePageState extends State<HomePage> {
       elevation: 0,
       centerTitle: true,
       leading: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage()),
+          );
+        },
         child: Container(
           margin: EdgeInsets.all(10),
           alignment: Alignment.center,
@@ -92,13 +108,20 @@ class _HomePageState extends State<HomePage> {
             color: AppColors.iconBackground,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: SvgPicture.asset('assets/icons/Arrow - Left 2.svg', height: 20, width: 20),
+          child: SvgPicture.asset(
+            'assets/icons/Arrow - Left 2.svg',
+            height: 20,
+            width: 20,
+          ),
         ),
       ),
       actions: [
         GestureDetector(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Login()),
+            );
           },
           child: Container(
             margin: EdgeInsets.all(10),
