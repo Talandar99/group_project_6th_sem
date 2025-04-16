@@ -30,16 +30,16 @@ class ProductTile extends StatelessWidget {
             color: AppColors.shadow,
             blurRadius: 15,
             offset: Offset(0,4),
-          )
+          ),
         ],
       ),
         child: Column (
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(product.name, style: AppTextStyles.subheading),
-            const SizedBox(height: 5),
+            const Padding(padding: EdgeInsets.only(top: 5)),
             Text('${product.price.toStringAsFixed(2)} zł', style: AppTextStyles.body),
-            const SizedBox(height: 10),
+            const Padding(padding: EdgeInsets.only(top: 10)),
             Row(
               children: [
                 Expanded(
@@ -48,7 +48,7 @@ class ProductTile extends StatelessWidget {
                         onPressed: onAddCart,
                     ),
                 ),
-                const SizedBox(width: 10),
+                const Padding(padding: EdgeInsets.only(left: 10)),
                 Expanded(
                   child: CustomOutlinedButton(
                     text: 'Szczegóły',

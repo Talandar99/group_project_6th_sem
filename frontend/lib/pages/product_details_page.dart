@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:frontend/widgets/page_indicator_dots.dart';
 import '../models/product_model.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
+import '../widgets/product_action_buttons.dart';
+import '../widgets/product_image_details.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final ProductModel product;
@@ -12,7 +14,6 @@ class ProductDetailsPage extends StatefulWidget {
   @override
   State<ProductDetailsPage> createState() => _ProductDetailsPageState();
 }
-
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   int quantity = 1;
   List<String> imageUrls = [];
@@ -121,67 +122,47 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  SizedBox(
-                    height: 300,
-                    child: PageView.builder(
-                      controller: _pageController,
-                      itemCount: imageUrls.length,
-                      onPageChanged: (index) {
-                        setState(() => _currentPage = index);
-                      },
-                      itemBuilder: (context, index) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(imageUrls[index], fit: BoxFit.cover),
-                        );
-                      },
-                    ),
-                  ),
-                  Positioned(
-                    left: 8,
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-                      onPressed: _previousImage,
-                    ),
-                  ),
-                  Positioned(
-                    right: 8,
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_forward_ios, color: Colors.white),
-                      onPressed: _nextImage,
-                    ),
-                  ),
-                ],
+              ProductImageDetails(
+                imageUrls: imageUrls,
+                currentPage: _currentPage,
+                controller: _pageController,
+                onNext: _nextImage,
+                onPrevious: _previousImage,
               ),
-              SizedBox(height: 12),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(imageUrls.length, (index) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                      width: _currentPage == index ? 12 : 8,
-                      height: _currentPage == index ? 12 : 8,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: _currentPage == index ? AppColors.primary : Colors.grey[300],
-                      ),
-                    );
-                  }),
+
+              Padding(
+                padding: EdgeInsets.only(top: 12),
+                child: Center(
+                  child: PageIndicatorDots(pageCount: imageUrls.length, currentPage: _currentPage),
                 ),
               ),
-              SizedBox(height: 24),
-              Text(widget.product.name, style: AppTextStyles.heading),
-              SizedBox(height: 8),
-              Text('${widget.product.price.toStringAsFixed(2)} zł', style: AppTextStyles.subheading.copyWith(color: AppColors.primary)),
-              SizedBox(height: 16),
-              Text('Opis', style: AppTextStyles.subheading),
-              SizedBox(height: 4),
-              Text(widget.product.description, style: AppTextStyles.body),
-              SizedBox(height: 24),
+
+              Padding(
+                padding: EdgeInsets.only(top: 24),
+                child: Text(widget.product.name, style: AppTextStyles.heading),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text(
+                  '${widget.product.price.toStringAsFixed(2)} zł',
+                  style: AppTextStyles.subheading.copyWith(color: AppColors.primary),
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(top: 16),
+                child: Text('Opis', style: AppTextStyles.subheading),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(top: 4),
+                child: Text(widget.product.description, style: AppTextStyles.body),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(top: 24),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -195,46 +176,33 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 24),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: _addToCart,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      ),
-                      child: Text('Do koszyka', style: AppTextStyles.button),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: _buyNow,
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        side: BorderSide(color: AppColors.primary),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      ),
-                      child: Text('Kup teraz', style: AppTextStyles.button.copyWith(color: AppColors.primary)),
-                    ),
-                  ),
-                ],
+              Padding(
+                padding: EdgeInsets.only(top: 24),
               ),
-              SizedBox(height: 20),
-              AnimatedOpacity(
-                opacity: showSuccess ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 500),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.check_circle, color: Colors.green),
-                      SizedBox(width: 8),
-                      Text('Dodano do koszyka', style: TextStyle(color: Colors.green, fontSize: 16)),
-                    ],
+              ProductActionButtons(
+                onAddToCart: _addToCart,
+                onBuyNow: _buyNow,
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: AnimatedOpacity(
+                  opacity: showSuccess ? 1.0 : 0.0,
+                  duration: Duration(milliseconds: 500),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.check_circle, color: Colors.green),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: Text(
+                            'Dodano do koszyka',
+                            style: TextStyle(color: Colors.green, fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
