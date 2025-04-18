@@ -16,6 +16,7 @@ class UserConnection {
       '$apiHost/users/register',
       emailPasswordDto,
     );
+    print(response.body.toString());
     return response.statusCode;
   }
 
