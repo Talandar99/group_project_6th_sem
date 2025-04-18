@@ -1,18 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:frontend/pages/home.dart';
+import 'package:frontend/widgets/custom_snackbar.dart';
+import 'package:get_it/get_it.dart';
+import '../services/login_connection.dart';
+import '../services/persistant_storage.dart';
 import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
+import '../web_api/dto/email_password.dart';
 import '../widgets/logo_section.dart';
-import '../widgets/email_field.dart';
-import '../widgets/password_field.dart';
+import '../widgets/custom_text_field_with_label_and_icon.dart';
 import '../widgets/remember_me_forgot_password.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/create_account_button.dart';
 import '../widgets/custom_app_bar.dart';
 
+//  Future<void> registerTest() async {
+//    var x = await loginConnectionService.register(
+//      EmailPasswordDto(
+//        email: "user@example.com",
+//        password: "securepassword123",
+//      ),
+//    );
+//    print("=========================================");
+//    print("status code");
+//    print("-----------------------------------------");
+//    print(x);
+//    print("=========================================");
+//    setState(() {
+//      text = "This is register status code:";
+//      token = x.toString();
+//    });
+//  }
+//
+//  Future<void> loginTest() async {
+//    var x = await loginConnectionService.login(
+//      EmailPasswordDto(
+//        email: "user@example.com",
+//        password: "securepassword123",
+//      ),
+//    );
+//    print("=========================================");
+//    print("token");
+//    print("-----------------------------------------");
+//    print(x.token);
+//    print("=========================================");
+//    setState(() {
+//      text = "This is your token:";
+//      token = x.token;
+//    });
+//  }
 class Login extends StatelessWidget {
-  const Login({super.key});
+  Login({super.key});
+
+  final UserConnection loginConnectionService = GetIt.I<UserConnection>();
+  final PersistentStorage persistentStorage = GetIt.I<PersistentStorage>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +92,19 @@ class Login extends StatelessWidget {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 16),
-                                child: EmailField(),
+                                child: CustomTextFieldWithLabelAndIcon(
+                                  controller: emailController,
+                                  textLabel: "Email",
+                                  icon: Icons.email,
+                                ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 8),
-                                child: PasswordField(),
+                                child: CustomTextFieldWithLabelAndIcon(
+                                  controller: passwordController,
+                                  textLabel: "Hasło",
+                                  icon: Icons.lock,
+                                ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 16),
@@ -64,14 +114,28 @@ class Login extends StatelessWidget {
                                 padding: const EdgeInsets.only(bottom: 16),
                                 child: CustomButton(
                                   text: 'Zaloguj się',
-                                  onPressed: () {
+                                  onPressed: () async {
+                                    try {
+                                      await loginConnectionService.login(
+                                        EmailPasswordDto(
+                                          email: emailController.text,
+                                          password: passwordController.text,
+                                        ),
+                                      );
+                                      displaySnackbar(context, "Zalogowano");
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => HomePage(),
+                                        ),
+                                      );
+                                    } catch (e) {
+                                      displaySnackbar(
+                                        context,
+                                        "Logowanie Nie Powiodło się",
+                                      );
+                                    }
                                     // Login here and navigate to the home page
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => HomePage(),
-                                      ),
-                                    );
                                   },
                                 ),
                               ),
