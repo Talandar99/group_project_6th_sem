@@ -5,7 +5,11 @@ class PageIndicatorDots extends StatelessWidget {
   final int pageCount;
   final int currentPage;
 
-  const PageIndicatorDots({super.key, required this.pageCount, required this.currentPage});
+  const PageIndicatorDots({
+    super.key,
+    required this.pageCount,
+    required this.currentPage,
+  });
 
   @override
   Widget build(BuildContext context) {

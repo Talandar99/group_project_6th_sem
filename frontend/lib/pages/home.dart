@@ -13,6 +13,7 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
 class _HomePageState extends State<HomePage> {
   final List<ProductModel> _products = [
     ProductModel(
@@ -48,9 +49,7 @@ class _HomePageState extends State<HomePage> {
             MaterialPageRoute(builder: (context) => const Login()),
           );
         },
-        onBackTap: () {
-
-        },
+        onBackTap: () {},
       ),
       backgroundColor: AppColors.white,
       body: LayoutBuilder(
@@ -69,13 +68,13 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(bottom: 40),
                 child: ProductList(
                   products: _products,
-                  onAddCart: (product) {
-                  },
+                  onAddCart: (product) {},
                   onDetails: (product) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProductDetailsPage(product: product),
+                        builder:
+                            (context) => ProductDetailsPage(product: product),
                       ),
                     );
                   },
@@ -87,6 +86,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   Container _searchField() {
     return Container(
       margin: EdgeInsets.only(top: 40),
@@ -98,9 +98,4 @@ class _HomePageState extends State<HomePage> {
       child: SearchField(),
     );
   }
-
 }
-
-
-
-

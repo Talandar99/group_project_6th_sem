@@ -14,6 +14,7 @@ class ProductDetailsPage extends StatefulWidget {
   @override
   State<ProductDetailsPage> createState() => _ProductDetailsPageState();
 }
+
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   int quantity = 1;
   List<String> imageUrls = [];
@@ -60,16 +61,17 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   void _showAlert(String message) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text('Uwaga'),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('OK'),
+      builder:
+          (_) => AlertDialog(
+            title: Text('Uwaga'),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -83,7 +85,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   void _buyNow() {
     print('Kup teraz: ${widget.product.name}, ilość: $quantity');
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Dziękujemy za zakup!')));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Dziękujemy za zakup!')));
   }
 
   void _goToCart() {
@@ -92,13 +96,19 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   void _nextImage() {
     if (_currentPage < imageUrls.length - 1) {
-      _pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+      _pageController.nextPage(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeIn,
+      );
     }
   }
 
   void _previousImage() {
     if (_currentPage > 0) {
-      _pageController.previousPage(duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+      _pageController.previousPage(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeIn,
+      );
     }
   }
 
@@ -113,7 +123,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           IconButton(
             icon: Icon(Icons.shopping_cart, color: AppColors.primary),
             onPressed: _goToCart,
-          )
+          ),
         ],
       ),
       body: Center(
@@ -133,7 +143,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               Padding(
                 padding: EdgeInsets.only(top: 12),
                 child: Center(
-                  child: PageIndicatorDots(pageCount: imageUrls.length, currentPage: _currentPage),
+                  child: PageIndicatorDots(
+                    pageCount: imageUrls.length,
+                    currentPage: _currentPage,
+                  ),
                 ),
               ),
 
@@ -146,7 +159,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 padding: EdgeInsets.only(top: 8),
                 child: Text(
                   '${widget.product.price.toStringAsFixed(2)} zł',
-                  style: AppTextStyles.subheading.copyWith(color: AppColors.primary),
+                  style: AppTextStyles.subheading.copyWith(
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
 
@@ -157,32 +172,34 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
               Padding(
                 padding: EdgeInsets.only(top: 4),
-                child: Text(widget.product.description, style: AppTextStyles.body),
+                child: Text(
+                  widget.product.description,
+                  style: AppTextStyles.body,
+                ),
               ),
 
-              Padding(
-                padding: EdgeInsets.only(top: 24),
-              ),
+              Padding(padding: EdgeInsets.only(top: 24)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Ilość:', style: AppTextStyles.body),
                   Row(
                     children: [
-                      IconButton(onPressed: _decrementQuantity, icon: Icon(Icons.remove_circle_outline)),
+                      IconButton(
+                        onPressed: _decrementQuantity,
+                        icon: Icon(Icons.remove_circle_outline),
+                      ),
                       Text(quantity.toString(), style: AppTextStyles.body),
-                      IconButton(onPressed: _incrementQuantity, icon: Icon(Icons.add_circle_outline)),
+                      IconButton(
+                        onPressed: _incrementQuantity,
+                        icon: Icon(Icons.add_circle_outline),
+                      ),
                     ],
                   ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 24),
-              ),
-              ProductActionButtons(
-                onAddToCart: _addToCart,
-                onBuyNow: _buyNow,
-              ),
+              Padding(padding: EdgeInsets.only(top: 24)),
+              ProductActionButtons(onAddToCart: _addToCart, onBuyNow: _buyNow),
 
               Padding(
                 padding: EdgeInsets.only(top: 20),

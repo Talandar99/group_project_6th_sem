@@ -15,7 +15,7 @@ class ProductTile extends StatelessWidget {
     required this.product,
     required this.onAddCart,
     required this.onDetails,
-});
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,36 +29,36 @@ class ProductTile extends StatelessWidget {
           BoxShadow(
             color: AppColors.shadow,
             blurRadius: 15,
-            offset: Offset(0,4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
-        child: Column (
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(product.name, style: AppTextStyles.subheading),
-            const Padding(padding: EdgeInsets.only(top: 5)),
-            Text('${product.price.toStringAsFixed(2)} zł', style: AppTextStyles.body),
-            const Padding(padding: EdgeInsets.only(top: 10)),
-            Row(
-              children: [
-                Expanded(
-                    child: CustomButton(
-                        text: 'Do koszyka',
-                        onPressed: onAddCart,
-                    ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(product.name, style: AppTextStyles.subheading),
+          const Padding(padding: EdgeInsets.only(top: 5)),
+          Text(
+            '${product.price.toStringAsFixed(2)} zł',
+            style: AppTextStyles.body,
+          ),
+          const Padding(padding: EdgeInsets.only(top: 10)),
+          Row(
+            children: [
+              Expanded(
+                child: CustomButton(text: 'Do koszyka', onPressed: onAddCart),
+              ),
+              const Padding(padding: EdgeInsets.only(left: 10)),
+              Expanded(
+                child: CustomOutlinedButton(
+                  text: 'Szczegóły',
+                  onPressed: onDetails,
                 ),
-                const Padding(padding: EdgeInsets.only(left: 10)),
-                Expanded(
-                  child: CustomOutlinedButton(
-                    text: 'Szczegóły',
-                    onPressed: onDetails,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        )
+              ),
+            ],
+          ),
+        ],
+      ),
     );
     throw UnimplementedError();
   }
