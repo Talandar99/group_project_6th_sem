@@ -23,7 +23,12 @@ class ProductsTable extends Table {
             ->notEmptyString('amount_in_stock', 'Amount in stock is required')
             ->integer('amount_in_stock', 'Amount in stock must be an integer')
             ->greaterThanOrEqual('amount_in_stock', 0, 'Amount in stock must be zero or more')
-            ->allowEmptyString('description'); // Pole opcjonalne
+            ->allowEmptyString('description')
+            ->allowEmptyFile('image_url')
+            ->add('image_url', 'validExtension', [
+                'rule' => ['extension', ['jpg', 'png', 'gif']],
+                'message' => 'Only image files with .jpg, .png, or .gif extensions are allowed',
+            ]);
         return $validator;
     }
 }
