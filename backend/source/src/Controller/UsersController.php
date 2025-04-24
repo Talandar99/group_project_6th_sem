@@ -121,30 +121,44 @@ class UsersController extends AppController
         $data = $this->request->getData();
         $user = $this->Users->patchEntity($user, $data);
 
-        // Walidacja i zapis użytkownika
-        try {
-            if ($this->Users->save($user)) {
-                $this->set([
-                    'success' => true,
-                    'message' => 'Rejestracja zakończona pomyślnie',
-                ]);
-            } else {
-                $this->set([
-                    'success' => false,
-                    'message' => 'Nie udało się zarejestrować użytkownika',
-                    'errors' => $user->getErrors(),
-                ]);
-            }
-        } catch (PersistenceFailedException $e) {
+        $email = $data['email'] ?? null;
+        $query = $this->Users->find()
+        ->where([
+            'email IS' => $email
+        ])
+        ->first();
+        if ($query) {
             $this->response = $this->response->withStatus(400);
             $this->set([
                 'success' => false,
-                'message' => 'Nie udało się zapisać użytkownika.',
-                'errors' => $e->getMessage(),
+                'message' => 'Podany adres e-mail jest już zarejestrowany.',
             ]);
+        } else {
+            try {
+                if ($this->Users->save($user)) {
+                    $this->set([
+                        'success' => true,
+                        'message' => 'Rejestracja zakończona pomyślnie',
+                    ]);
+                } else {
+                    $this->set([
+                        'success' => false,
+                        'message' => 'Nie udało się zarejestrować użytkownika',
+                        'errors' => $user->getErrors(),
+                    ]);
+                }
+            } catch (PersistenceFailedException $e) {
+                $this->response = $this->response->withStatus(400);
+                $this->set([
+                    'success' => false,
+                    'message' => 'Nie udało się zapisać użytkownika.',
+                    'errors' => $e->getMessage(),
+                ]);
+            }
         }
 
         
+        $this->viewBuilder()->setClassName('Json');
         $this->viewBuilder()->setOption('serialize', ['success', 'errors', 'message']);
     }
 
@@ -223,6 +237,7 @@ class UsersController extends AppController
             ]);
         }
 
+        $this->viewBuilder()->setClassName('Json');
         $this->viewBuilder()->setOption('serialize', ['success', 'message', 'errors']);
     }
 
@@ -261,6 +276,7 @@ class UsersController extends AppController
             'success' => true,
             'message' => 'Zostałeś poprawnie wylogowany',
         ]);
+        $this->viewBuilder()->setClassName('Json');
         $this->viewBuilder()->setOption('serialize', ['success', 'message']);
     }
 }
