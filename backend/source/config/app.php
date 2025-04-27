@@ -188,6 +188,7 @@ return [
         'skipLog' => [],
         'log' => true,
         'trace' => true,
+        'exceptionRenderer' => 'App\Error\JsonExceptionRenderer',
         'ignoredDeprecationPaths' => [
             '/var/www/html/templates/Pages/home.php'
         ],
