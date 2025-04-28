@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/edit_profile_page.dart';
+import 'package:frontend/widgets/cancel_button.dart';
 import 'change_password_page.dart';
 import 'login.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/profile_action_button.dart';
+
+import '../widgets/profile_card.dart';
+
 import 'home.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -29,13 +34,24 @@ class ProfilePage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      _buildStaticAppBar(),
-                      const SizedBox(height: 16),
-                      _buildProfileCard(),
-                      const SizedBox(height: 32),
-                      _buildButton(
-                        'Edytuj Profil',
-                        Icons.edit,
+                      // AppBar
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: _buildStaticAppBar(),
+                      ),
+
+                      // Karta Profilu
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 32),
+                        child: ProfileCard(
+                          name: 'MyName',
+                          email: 'myemail@example.com',
+                        ),
+                      ),
+
+                      ProfileActionButton(
+                        text: 'Edytuj Profil',
+                        icon: Icons.edit,
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -45,9 +61,10 @@ class ProfilePage extends StatelessWidget {
                           );
                         },
                       ),
-                      _buildButton(
-                        'Zmień Hasło',
-                        Icons.lock,
+
+                      ProfileActionButton(
+                        text: 'Zmień Hasło',
+                        icon: Icons.lock,
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -58,9 +75,10 @@ class ProfilePage extends StatelessWidget {
                         },
                         outlined: true,
                       ),
-                      _buildButton(
-                        'Wyloguj się',
-                        Icons.logout,
+
+                      ProfileActionButton(
+                        text: 'Wyloguj się',
+                        icon: Icons.logout,
                         onPressed: () {
                           Navigator.pushAndRemoveUntil(
                             context,
@@ -71,16 +89,14 @@ class ProfilePage extends StatelessWidget {
                           );
                         },
                       ),
-                      _buildButton(
-                        'Anuluj',
-                        Icons.cancel,
+
+                      CancelButton(
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (context) => HomePage()),
                           );
                         },
-                        outlined: true,
                       ),
                     ],
                   ),
@@ -95,63 +111,9 @@ class ProfilePage extends StatelessWidget {
 
   Widget _buildStaticAppBar() {
     return Container(
-      padding: const EdgeInsets.only(top: 24, bottom: 8),
+      padding: const EdgeInsets.only(top: 2, bottom: 16),
       alignment: Alignment.center,
       child: Text('Mój profil', style: AppTextStyles.appBarTitle),
-    );
-  }
-
-  Widget _buildProfileCard() {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            CircleAvatar(
-              radius: 50,
-              backgroundColor: AppColors.primary,
-              child: const Icon(Icons.person, size: 50, color: Colors.white),
-            ),
-            const SizedBox(height: 16),
-            Text('MyName', style: AppTextStyles.heading),
-            const SizedBox(height: 4),
-            Text('myemail@example.com', style: AppTextStyles.subheading),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButton(
-    String text,
-    IconData icon, {
-    required VoidCallback onPressed,
-    bool outlined = false,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: SizedBox(
-        width: double.infinity,
-        height: 50,
-        child:
-            outlined
-                ? OutlinedButton.icon(
-                  onPressed: onPressed,
-                  icon: Icon(icon, color: AppColors.primary),
-                  label: Text(text),
-                )
-                : ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                  ),
-                  onPressed: onPressed,
-                  icon: Icon(icon, color: Colors.white),
-                  label: Text(text),
-                ),
-      ),
     );
   }
 }

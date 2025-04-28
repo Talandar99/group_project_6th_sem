@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/cancel_button.dart';
+import 'package:frontend/widgets/static_header.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
@@ -29,7 +31,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: isWideScreen ? constraints.maxWidth * 0.2 : 24,
-                vertical: 24,
+                vertical: 48,
               ),
               child: Center(
                 child: ConstrainedBox(
@@ -37,80 +39,84 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const SizedBox(height: 48),
-
-                      _buildStaticHeader(),
-                      const SizedBox(height: 32),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 38),
+                        child: StaticHeader(
+                          icon: Icons.lock,
+                          title: 'Zmień hasło',
+                          subtitle: 'Wprowadź aktualne i nowe hasło',
+                        ),
+                      ),
 
                       // Obecne hasło
-                      _buildPasswordField(
-                        controller: _currentPasswordController,
-                        label: 'Obecne hasło',
-                        isVisible: _showCurrentPassword,
-                        toggleVisibility: () {
-                          setState(() {
-                            _showCurrentPassword = !_showCurrentPassword;
-                          });
-                        },
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: _buildPasswordField(
+                          controller: _currentPasswordController,
+                          label: 'Obecne hasło',
+                          isVisible: _showCurrentPassword,
+                          toggleVisibility: () {
+                            setState(() {
+                              _showCurrentPassword = !_showCurrentPassword;
+                            });
+                          },
+                        ),
                       ),
-                      const SizedBox(height: 16),
 
                       // Nowe hasło
-                      _buildPasswordField(
-                        controller: _newPasswordController,
-                        label: 'Nowe hasło',
-                        isVisible: _showNewPassword,
-                        toggleVisibility: () {
-                          setState(() {
-                            _showNewPassword = !_showNewPassword;
-                          });
-                        },
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: _buildPasswordField(
+                          controller: _newPasswordController,
+                          label: 'Nowe hasło',
+                          isVisible: _showNewPassword,
+                          toggleVisibility: () {
+                            setState(() {
+                              _showNewPassword = !_showNewPassword;
+                            });
+                          },
+                        ),
                       ),
-                      const SizedBox(height: 16),
 
                       // Powtórz nowe hasło
-                      _buildPasswordField(
-                        controller: _repeatPasswordController,
-                        label: 'Powtórz nowe hasło',
-                        isVisible: _showRepeatPassword,
-                        toggleVisibility: () {
-                          setState(() {
-                            _showRepeatPassword = !_showRepeatPassword;
-                          });
-                        },
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 32),
+                        child: _buildPasswordField(
+                          controller: _repeatPasswordController,
+                          label: 'Powtórz nowe hasło',
+                          isVisible: _showRepeatPassword,
+                          toggleVisibility: () {
+                            setState(() {
+                              _showRepeatPassword = !_showRepeatPassword;
+                            });
+                          },
+                        ),
                       ),
-                      const SizedBox(height: 32),
 
                       // Zapisz
-                      SizedBox(
-                        height: 50,
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: SizedBox(
+                          height: 50,
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                            ),
+                            icon: const Icon(Icons.lock_reset),
+                            label: const Text('Zapisz'),
                           ),
-                          icon: const Icon(Icons.lock_reset),
-                          label: const Text('Zapisz'),
                         ),
                       ),
-                      const SizedBox(height: 16),
 
                       // Anuluj
-                      SizedBox(
-                        height: 50,
-                        child: OutlinedButton.icon(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(
-                            Icons.cancel,
-                            color: AppColors.primary,
-                          ),
-                          label: const Text('Anuluj'),
-                        ),
+                      CancelButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                       ),
                     ],
                   ),
@@ -120,29 +126,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           );
         },
       ),
-    );
-  }
-
-  Widget _buildStaticHeader() {
-    return Column(
-      children: [
-        const Icon(Icons.lock, size: 150, color: AppColors.primary),
-        const SizedBox(height: 12),
-        Text(
-          'Zmień hasło',
-          style: AppTextStyles.heading.copyWith(fontSize: 20),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 6),
-        Text(
-          'Wprowadź aktualne i nowe hasło',
-          style: AppTextStyles.subheading.copyWith(
-            fontSize: 14,
-            color: Colors.grey,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
     );
   }
 
