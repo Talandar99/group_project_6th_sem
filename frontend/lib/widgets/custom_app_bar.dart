@@ -55,7 +55,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               color: AppColors.iconBackground,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(Icons.verified_user_rounded, color: AppColors.primary),
+            child: Icon(Icons.verified_user, color: AppColors.primary),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {}, //TODO add action after tapping button
+          child: Container(
+            margin: EdgeInsets.all(10),
+            alignment: Alignment.center,
+            width: 37,
+            decoration: BoxDecoration(
+              color: AppColors.iconBackground,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(Icons.shopping_cart, color: AppColors.iconColor),
           ),
         ),
         GestureDetector(
