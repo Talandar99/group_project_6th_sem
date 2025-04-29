@@ -116,13 +116,14 @@ class Login extends StatelessWidget {
                                   text: 'Zaloguj się',
                                   onPressed: () async {
                                     try {
-                                      await loginConnectionService.login(
-                                        EmailPasswordDto(
-                                          email: emailController.text,
-                                          password: passwordController.text,
-                                        ),
-                                      );
-                                      displaySnackbar(context, "Zalogowano");
+                                      var message = await loginConnectionService
+                                          .login(
+                                            EmailPasswordDto(
+                                              email: emailController.text,
+                                              password: passwordController.text,
+                                            ),
+                                          );
+                                      displaySnackbar(context, message);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(

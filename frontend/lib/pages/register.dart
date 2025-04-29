@@ -74,18 +74,15 @@ class Register extends StatelessWidget {
                                 child: CustomButton(
                                   text: 'Załóż konto',
                                   onPressed: () async {
-                                    int x = 0;
                                     try {
-                                      x = await loginConnectionService.register(
-                                        EmailPasswordDto(
-                                          email: emailController.text,
-                                          password: passwordController.text,
-                                        ),
-                                      );
-                                      displaySnackbar(
-                                        context,
-                                        "Zarejestrowano, możesz się zalogować $x",
-                                      );
+                                      var message = await loginConnectionService
+                                          .register(
+                                            EmailPasswordDto(
+                                              email: emailController.text,
+                                              password: passwordController.text,
+                                            ),
+                                          );
+                                      displaySnackbar(context, message);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -95,7 +92,7 @@ class Register extends StatelessWidget {
                                     } catch (e) {
                                       displaySnackbar(
                                         context,
-                                        "Rejestracja nie powiodła się $x",
+                                        "Rejestracja nie powiodła się",
                                       );
                                     }
                                   },
