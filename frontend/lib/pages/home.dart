@@ -61,6 +61,7 @@ class _HomePageState extends State<HomePage> {
                   isWideScreen
                       ? constraints.maxWidth * 0.2
                       : 20, // Wider padding for PC
+
             ),
             children: [
               Padding(
