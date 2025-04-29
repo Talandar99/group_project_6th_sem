@@ -1,12 +1,12 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
+        background-color:rgb(27, 27, 27);
         text-align: center;
-        padding: 50px;
+        padding: 10px 50px;
     }
     .container {
-        background: white;
+        background: lightskyblue;
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -27,8 +27,6 @@
         background-color: #0056b3;
     }
 </style>
-<div class="container">
-    <h1>Witaj na naszej stronie!</h1>
-    <p>Zapraszamy do zapoznania się z naszą dokumentacją API.</p>
-    <a href="/swagger" class="button">Przejdź do Swaggera</a>
-</div>
+<h1>Witaj na naszej stronie!</h1>
+<p>Zapraszamy do zapoznania się z naszą dokumentacją API.</p>
+<a href="/swagger" class="button">Przejdź do Swaggera</a>
