@@ -4,6 +4,7 @@ import 'package:frontend/pages/login.dart';
 import 'package:frontend/pages/profile.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
+import '../widgets/custom_app_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,11 +17,22 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
+      appBar: CustomAppBar(
+        title: 'Sklep',
+        onProfileTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Login()),
+          );
+        },
+        onBackTap: () {
+          // back button if needed?
+        },
+      ),
       backgroundColor: AppColors.white,
       body: LayoutBuilder(
         builder: (context, constraints) {
-          final isWideScreen = constraints.maxWidth > 600; // Adjust for PC
+          final isWideScreen = constraints.maxWidth > 600;
           return ListView(
             padding: EdgeInsets.symmetric(
               horizontal:
