@@ -80,13 +80,7 @@ class ProfilePage extends StatelessWidget {
                         text: 'Wyloguj się',
                         icon: Icons.logout,
                         onPressed: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Login(),
-                            ),
-                            (route) => false,
-                          );
+                          Navigator.pop(context);
                         },
                       ),
 
