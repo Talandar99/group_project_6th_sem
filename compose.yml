@@ -14,7 +14,7 @@ services:
       - 8443:443
     environment:
       PHP_MAX_INPUT_VARS: 9999
-      DEBUG: true
+      DEBUG: false
     networks:
       - network
 

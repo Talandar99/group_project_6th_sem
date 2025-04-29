@@ -46,7 +46,8 @@ class ProductsController extends AppController {
      *                     @OA\Property(property="product_name", type="string", example="Product 1"),
      *                     @OA\Property(property="price", type="number", format="float", example=19.99),
      *                     @OA\Property(property="amount_in_stock", type="integer", example=100),
-     *                     @OA\Property(property="description", type="string", example="Description of product")
+     *                     @OA\Property(property="description", type="string", example="Description of product"),
+     *                     @OA\Property(property="image_url", type="string", example="images/img-1.jpg")
      *                 )
      *             )
      *         )
@@ -75,7 +76,7 @@ class ProductsController extends AppController {
         $this->set([
             'success' => true,
             'count' => $count,
-            'data' => $products,
+            'data' => $products->toArray(),
         ]);
         $this->viewBuilder()->setOption('serialize', ['success', 'count', 'data']);
         $this->viewBuilder()->setClassName('Json');
@@ -85,17 +86,22 @@ class ProductsController extends AppController {
      * @OA\Post(
      *     path="/products/add",
      *     summary="Dodanie nowego produktu",
-     *     description="Endpoint umożliwia dodanie nowego produktu.",
+     *     description="Endpoint umożliwia dodanie nowego produktu, wraz ze zdjęciem.",
      *     tags={"Products"},
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(
-     *             required={"product_name", "price", "amount_in_stock"},
-     *             @OA\Property(property="product_name", type="string", example="New Product"),
-     *             @OA\Property(property="price", type="number", format="float", example=29.99),
-     *             @OA\Property(property="amount_in_stock", type="integer", example=50),
-     *             @OA\Property(property="description", type="string", example="Optional description")
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 required={"product_name", "price", "amount_in_stock", "image"},
+     *                 @OA\Property(property="product_name", type="string", example="New Product"),
+     *                 @OA\Property(property="price", type="number", format="float", example=29.99),
+     *                 @OA\Property(property="amount_in_stock", type="integer", example=50),
+     *                 @OA\Property(property="description", type="string", example="Optional description"),
+     *                 @OA\Property(property="image", type="string", format="binary", example="image_file.jpg")
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -103,7 +109,8 @@ class ProductsController extends AppController {
      *         description="Produkt dodany pomyślnie",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Product added successfully")
+     *             @OA\Property(property="message", type="string", example="Product added successfully"),
+     *             @OA\Property(property="image_url", type="string", example="img/product_image.jpg")
      *         )
      *     ),
      *     @OA\Response(
@@ -111,7 +118,8 @@ class ProductsController extends AppController {
      *         description="Błąd podczas dodawania produktu",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Failed to add product")
+     *             @OA\Property(property="message", type="string", example="Failed to add product"),
+     *             @OA\Property(property="errors", type="array", @OA\Items(type="string"))
      *         )
      *     )
      * )
@@ -119,7 +127,16 @@ class ProductsController extends AppController {
     public function add() {
         $this->request->allowMethod(['post']);
         $product = $this->Products->newEmptyEntity();
-        $product = $this->Products->patchEntity($product, $this->request->getData());
+        $data = $this->request->getData();
+
+        $file = $this->request->getData('image');
+        if ($file && $file->getError() === UPLOAD_ERR_OK) {
+            $filePath = WWW_ROOT . 'img' . DS . $file->getClientFilename();
+            $file->moveTo($filePath);
+            $data['image_url'] = 'img' . DS . $file->getClientFilename();
+        }
+
+        $product = $this->Products->patchEntity($product, $data);
 
         if ($this->Products->save($product)) {
             $this->set([
@@ -136,13 +153,14 @@ class ProductsController extends AppController {
         }
 
         $this->viewBuilder()->setOption('serialize', ['success', 'message', 'errors']);
+        $this->viewBuilder()->setClassName('Json');
     }
 
     /**
-     * @OA\Put(
+     * @OA\Post(
      *     path="/products/edit/{id}",
      *     summary="Edycja produktu",
-     *     description="Endpoint umożliwia edycję istniejącego produktu.",
+     *     description="Endpoint umożliwia edycję istniejącego produktu, wraz z możliwością aktualizacji zdjęcia.",
      *     tags={"Products"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
@@ -154,11 +172,17 @@ class ProductsController extends AppController {
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="product_name", type="string", example="Updated Product"),
-     *             @OA\Property(property="price", type="number", format="float", example=19.99),
-     *             @OA\Property(property="amount_in_stock", type="integer", example=120),
-     *             @OA\Property(property="description", type="string", example="Updated description")
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 required={"product_name", "price", "amount_in_stock", "image"},
+     *                 @OA\Property(property="product_name", type="string", example="Updated Product"),
+     *                 @OA\Property(property="price", type="number", format="float", example=19.99),
+     *                 @OA\Property(property="amount_in_stock", type="integer", example=120),
+     *                 @OA\Property(property="description", type="string", example="Updated description"),
+     *                 @OA\Property(property="image", type="string", format="binary", example="updated_image.jpg")
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -166,7 +190,7 @@ class ProductsController extends AppController {
      *         description="Produkt zaktualizowany pomyślnie",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Product updated successfully")
+     *             @OA\Property(property="message", type="string", example="Product updated successfully"),
      *         )
      *     ),
      *     @OA\Response(
@@ -174,15 +198,27 @@ class ProductsController extends AppController {
      *         description="Błąd podczas aktualizacji produktu",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Failed to update product")
+     *             @OA\Property(property="message", type="string", example="Failed to update product"),
+     *             @OA\Property(property="errors", type="array", @OA\Items(type="string"))
      *         )
      *     )
      * )
      */
     public function edit($id = null) {
-        $this->request->allowMethod(['put']);
+        $this->request->allowMethod(['post']);
         $product = $this->Products->get($id);
-        $product = $this->Products->patchEntity($product, $this->request->getData());
+        $data = $this->request->getData();
+
+        $file = $this->request->getData('image');
+        if ($file && $file->getError() === UPLOAD_ERR_OK) {
+            $filePath = WWW_ROOT . 'img' . DS . $file->getClientFilename();
+            $file->moveTo($filePath);
+            $data['image_url'] = 'img' . DS . $file->getClientFilename();
+        } else {
+            $data['image_url'] = $product->image_url;
+        }
+
+        $product = $this->Products->patchEntity($product, $data);
 
         if ($this->Products->save($product)) {
             $this->set([
@@ -199,6 +235,7 @@ class ProductsController extends AppController {
         }
 
         $this->viewBuilder()->setOption('serialize', ['success', 'message', 'errors']);
+        $this->viewBuilder()->setClassName('Json');
     }
 
     /**
@@ -251,5 +288,6 @@ class ProductsController extends AppController {
         }
 
         $this->viewBuilder()->setOption('serialize', ['success', 'message']);
+        $this->viewBuilder()->setClassName('Json');
     }
 }

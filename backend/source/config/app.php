@@ -56,7 +56,7 @@ return [
         'webroot' => 'webroot',
         'wwwRoot' => WWW_ROOT,
         //'baseUrl' => env('SCRIPT_NAME'),
-        'fullBaseUrl' => false,
+        'fullBaseUrl' => env('FULL_BASE_URL', 'http://localhost:8080'),
         'imageBaseUrl' => 'img/',
         'cssBaseUrl' => 'css/',
         'jsBaseUrl' => 'js/',
@@ -188,6 +188,7 @@ return [
         'skipLog' => [],
         'log' => true,
         'trace' => true,
+        'exceptionRenderer' => 'App\Error\JsonExceptionRenderer',
         'ignoredDeprecationPaths' => [
             '/var/www/html/templates/Pages/home.php'
         ],
