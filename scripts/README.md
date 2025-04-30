@@ -1,11 +1,12 @@
 # Scripts
 ## Linux
-- rebuild_Dockerfile.sh   - rebuild Dockerfile image 
-- setupdocker_backend.sh  - run backend
+- backend_rebuild_dockerfile.sh      - rebuild Dockerfile image 
+- backend_run_docker_container.sh    - run backend
+- pgsql_execute_database_querry.sh   - run querry located in database/query.sql
 
 ## Windows
-- rebuild_Dockerfile.bat  - rebuild Dockerfile image 
-- setupdocker_backend.bat - run backend
+- backend_rebuild_dockerfile.bat   - rebuild Dockerfile image 
+- backend_run_docker_container.bat - run backend
 
 # How to run
 ```sh
