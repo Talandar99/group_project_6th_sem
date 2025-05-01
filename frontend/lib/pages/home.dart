@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
         onProfileTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const Login()),
+            MaterialPageRoute(builder: (context) => Login()),
           );
         },
         onBackTap: () {},
@@ -57,7 +57,11 @@ class _HomePageState extends State<HomePage> {
           final isWideScreen = constraints.maxWidth > 600;
           return ListView(
             padding: EdgeInsets.symmetric(
-              horizontal: isWideScreen ? constraints.maxWidth * 0.2 : 20,
+              horizontal:
+                  isWideScreen
+                      ? constraints.maxWidth * 0.2
+                      : 20, // Wider padding for PC
+
             ),
             children: [
               Padding(

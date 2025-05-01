@@ -7,4 +7,6 @@ class AppColors {
   static const Color divider = Colors.black;
   static const Color iconColor = Colors.black;
   static const Color iconBackground = Color(0XFFf7f8f8);
+
+ 
 }

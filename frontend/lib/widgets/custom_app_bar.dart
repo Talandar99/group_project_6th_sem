@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/pages/profile.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
@@ -39,6 +40,24 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: [
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfilePage()),
+            );
+          },
+          child: Container(
+            margin: EdgeInsets.all(10),
+            alignment: Alignment.center,
+            width: 37,
+            decoration: BoxDecoration(
+              color: AppColors.iconBackground,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(Icons.verified_user, color: AppColors.primary),
+          ),
+        ),
         GestureDetector(
           onTap: () {}, //TODO add action after tapping button
           child: Container(

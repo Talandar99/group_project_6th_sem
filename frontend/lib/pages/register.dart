@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:frontend/pages/home.dart';
+import 'package:frontend/services/login_connection.dart';
+import 'package:frontend/services/persistant_storage.dart';
+import 'package:frontend/web_api/dto/email_password.dart';
+import 'package:frontend/widgets/custom_snackbar.dart';
+import 'package:get_it/get_it.dart';
 import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
 import '../widgets/logo_section.dart';
-import '../widgets/email_field.dart';
-import '../widgets/password_field.dart';
-import '../widgets/remember_me_forgot_password.dart';
+import '../widgets/custom_text_field_with_label_and_icon.dart';
 import '../widgets/custom_button.dart';
-import '../widgets/create_account_button.dart';
 import '../widgets/custom_app_bar.dart';
 
 class Register extends StatelessWidget {
-  const Register({super.key});
+  Register({super.key});
+
+  final UserConnection loginConnectionService = GetIt.I<UserConnection>();
+  final PersistentStorage persistentStorage = GetIt.I<PersistentStorage>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,24 +55,46 @@ class Register extends StatelessWidget {
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(bottom: 16),
-                                child: EmailField(),
+                                child: CustomTextFieldWithLabelAndIcon(
+                                  controller: emailController,
+                                  textLabel: "Email",
+                                  icon: Icons.email,
+                                ),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(bottom: 16),
-                                child: PasswordField(),
+                                child: CustomTextFieldWithLabelAndIcon(
+                                  controller: passwordController,
+                                  textLabel: "Hasło",
+                                  icon: Icons.lock,
+                                ),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(bottom: 16),
                                 child: CustomButton(
                                   text: 'Załóż konto',
-                                  onPressed: () {
-                                    // Register here and navigate to the home page
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => HomePage(),
-                                      ),
-                                    );
+                                  onPressed: () async {
+                                    try {
+                                      var message = await loginConnectionService
+                                          .register(
+                                            EmailPasswordDto(
+                                              email: emailController.text,
+                                              password: passwordController.text,
+                                            ),
+                                          );
+                                      displaySnackbar(context, message);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => HomePage(),
+                                        ),
+                                      );
+                                    } catch (e) {
+                                      displaySnackbar(
+                                        context,
+                                        "Rejestracja nie powiodła się",
+                                      );
+                                    }
                                   },
                                 ),
                               ),
