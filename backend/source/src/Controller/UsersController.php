@@ -36,7 +36,7 @@ class UsersController extends AppController
      *         description="Zwraca token JWT",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Poprawnie zalogowano")
+     *             @OA\Property(property="message", type="string", example="Poprawnie zalogowano"),
      *             @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...")
      *         )
      *     ),
