@@ -15,17 +15,8 @@ class SwaggerController extends Controller
     }
     /**
      * @OA\Info(
-     *     title="My API",
+     *     title="Group project 6th API",
      *     version="1.0.0",
-     *     description="A brief description of your API",
-     *     termsOfService="http://example.com/terms/",
-     *     contact={
-     *         "email": "support@example.com"
-     *     },
-     *     license={
-     *         "name": "Apache 2.0",
-     *         "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-     *     }
      * )
      */
     public function api()
