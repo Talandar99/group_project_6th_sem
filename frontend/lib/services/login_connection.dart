@@ -33,11 +33,8 @@ class UserConnection {
       var decodedBody = json.decode(response.body);
       var token = TokenDto.fromJson(decodedBody);
       persistentStorage.saveData(StorageKeys.apiToken, token.token.toString());
-
-      //print(response.body.toString());
-      //var message = MessageDto.fromJson(decodedBody);
-      //change to message
-      return token.token;
+      var message = MessageDto.fromJson(decodedBody);
+      return message.message;
     } else {
       throw Exception(response.statusCode);
     }
