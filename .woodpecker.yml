@@ -1,6 +1,6 @@
 pipeline:
   flutter_web_build:
-    image: cirrusci/flutter:latest
+    image: instrumentisto/flutter:latest
     commands:
       - cd frontend
       - flutter pub get
