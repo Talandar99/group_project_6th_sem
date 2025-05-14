@@ -12,6 +12,7 @@ jobs:
     container:
       image: instrumentisto/flutter:latest
     steps:
+      - uses: actions/checkout@v4  # To jest konieczne, żeby pobrać kod
       - name: Build Flutter Web
         run: |
           cd frontend
