@@ -12,9 +12,6 @@ jobs:
     container:
       image: instrumentisto/flutter:latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Build Flutter Web
         run: |
           cd frontend
@@ -28,6 +25,3 @@ jobs:
         with:
           name: flutter_web_build
           path: flutter_web_build.zip
-
-
-
