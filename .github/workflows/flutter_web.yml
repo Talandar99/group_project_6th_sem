@@ -16,6 +16,9 @@ jobs:
         run: git config --global --add safe.directory /usr/local/flutter
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Update API host in host_ip.dart
+        run: |
+          sed -i 's|https://localhost:8443|https://projekt.dawtyl.ovh:8443|' frontend/lib/web_api/host_ip.dart
       - name: Build Flutter Web
         run: |
           cd frontend
