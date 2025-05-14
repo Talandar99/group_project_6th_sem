@@ -1,8 +1,0 @@
-pipeline:
-  flutter_web_build:
-    image: instrumentisto/flutter:latest
-    commands:
-      - cd frontend
-      - flutter pub get
-      - flutter test
-      - flutter build web
