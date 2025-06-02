@@ -52,6 +52,13 @@ class ProductsController extends AppController {
      *         required=false,
      *         @OA\Schema(type="integer", example=10)
      *     ),
+     *     @OA\Parameter(
+     *         name="s",
+     *         in="query",
+     *         description="Ciąg wyszukiwania",
+     *         required=false,
+     *         @OA\Schema(type="string", example="example_search")
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Lista produktów",
@@ -89,9 +96,10 @@ class ProductsController extends AppController {
                 'Products.id' => 'desc',
             ]
         ];
-    
-        $products = $this->paginate($this->Products);
-        $count = $this->Products->find('all')->count();
+        $s = $this->request->getQuery('s') ?? '';
+        $find_q = !empty($s) ? ['conditions' => ['OR' => ['Products.product_name LIKE' => "%$s%", 'Products.description LIKE' => "%$s%"]]] : [];
+        $products = $this->paginate($this->Products->find('all', $find_q));
+        $count = $this->Products->find('all',$find_q)->count();
 
         $this->set([
             'success' => true,
