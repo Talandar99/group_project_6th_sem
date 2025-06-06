@@ -64,6 +64,7 @@ class Login extends StatelessWidget {
         onBackTap: () {
           Navigator.pop(context);
         },
+        showActions: false,
       ),
       backgroundColor: AppColors.white,
       body: LayoutBuilder(

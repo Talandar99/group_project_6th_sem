@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/login.dart';
 import 'package:frontend/pages/product_details_page.dart';
+import 'package:frontend/theme/app_text_styles.dart';
 import '../theme/app_colors.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/product_list.dart';
@@ -15,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<ProductModel> _products = [
+  final List<ProductModel> _allProducts = [
     ProductModel(
       id: 1,
       name: 'Fotel klasyczny',
@@ -38,6 +39,27 @@ class _HomePageState extends State<HomePage> {
       description: 'Elegancka sofa 3-osobowa, doskonała do salonu.',
     ),
   ];
+
+  List<ProductModel> _products = [];
+  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _products = List.from(_allProducts);
+  }
+
+  void _onSearchChanged(String query) {
+    setState(() {
+      _searchQuery = query;
+      _products = _allProducts
+          .where((product) =>
+              product.name.toLowerCase().contains(query.toLowerCase()) ||
+              product.description.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +71,8 @@ class _HomePageState extends State<HomePage> {
             MaterialPageRoute(builder: (context) => Login()),
           );
         },
-        onBackTap: () {},
+        showActions: true,
+        onBackTap: null,
       ),
       backgroundColor: AppColors.white,
       body: LayoutBuilder(
@@ -60,8 +83,7 @@ class _HomePageState extends State<HomePage> {
               horizontal:
                   isWideScreen
                       ? constraints.maxWidth * 0.2
-                      : 20, // Wider padding for PC
-
+                      : 20,
             ),
             children: [
               Padding(
@@ -77,8 +99,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder:
-                            (context) => ProductDetailsPage(product: product),
+                        builder: (context) => ProductDetailsPage(product: product),
                       ),
                     );
                   },
@@ -91,7 +112,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Container _searchField() {
+  Widget _searchField() {
     return Container(
       margin: EdgeInsets.only(top: 40),
       decoration: BoxDecoration(
@@ -99,7 +120,24 @@ class _HomePageState extends State<HomePage> {
           BoxShadow(color: AppColors.shadow, blurRadius: 40, spreadRadius: 0),
         ],
       ),
-      child: SearchField(),
+      child: TextField(
+        onChanged: _onSearchChanged,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: AppColors.white,
+          contentPadding: EdgeInsets.all(15),
+          hintText: 'Szukaj produktów',
+          hintStyle: AppTextStyles.hint,
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Icon(Icons.search, color: AppColors.iconColor),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
     );
   }
 }

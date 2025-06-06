@@ -5,6 +5,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../widgets/product_action_buttons.dart';
 import '../widgets/product_image_details.dart';
+import '../widgets/custom_app_bar.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final ProductModel product;
@@ -76,7 +77,19 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   }
 
   void _addToCart() {
-    print('Dodano do koszyka: ${widget.product.name}, ilość: $quantity');
+    // Przekazanie produktu do koszyka przez Navigator
+    Navigator.pushNamed(
+      context,
+      '/cart',
+      arguments: {
+        'id': widget.product.id,
+        'name': widget.product.name,
+        'description': widget.product.description,
+        'price': widget.product.price,
+        'image': 'assets/icons/table.jpg',
+        'quantity': quantity,
+      },
+    );
     setState(() => showSuccess = true);
     Future.delayed(Duration(seconds: 2), () {
       setState(() => showSuccess = false);
@@ -116,15 +129,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: AppBar(
-        title: Text('Szczegóły produktu', style: AppTextStyles.subheading),
-        backgroundColor: AppColors.white,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.shopping_cart, color: AppColors.primary),
-            onPressed: _goToCart,
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: 'Szczegóły produktu',
+        showActions: false,
+        onBackTap: () {
+          Navigator.pop(context);
+        },
       ),
       body: Center(
         child: ConstrainedBox(
@@ -185,14 +195,50 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   Text('Ilość:', style: AppTextStyles.body),
                   Row(
                     children: [
-                      IconButton(
-                        onPressed: _decrementQuantity,
-                        icon: Icon(Icons.remove_circle_outline),
+                      InkWell(
+                        onTap: quantity > 1 ? _decrementQuantity : null,
+                        borderRadius: BorderRadius.circular(100),
+                        child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: quantity <= 1 ? Colors.grey[100] : AppColors.white,
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(
+                              color: quantity <= 1 ? Colors.grey[200]! : Colors.grey[300]!
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.remove,
+                            color: quantity <= 1 ? Colors.grey[400] : Colors.black,
+                          ),
+                        ),
                       ),
-                      Text(quantity.toString(), style: AppTextStyles.body),
-                      IconButton(
-                        onPressed: _incrementQuantity,
-                        icon: Icon(Icons.add_circle_outline),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          quantity.toString(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: _incrementQuantity,
+                        borderRadius: BorderRadius.circular(100),
+                        child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: AppColors.primary,
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ],
                   ),
