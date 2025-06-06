@@ -104,6 +104,7 @@ class Login extends StatelessWidget {
                                   controller: passwordController,
                                   textLabel: "Hasło",
                                   icon: Icons.lock,
+                                  isPassword: true, // dodaje zeby sie tam to oczko pokazalo
                                 ),
                               ),
                               Padding(
