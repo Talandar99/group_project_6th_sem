@@ -64,6 +64,7 @@ class Login extends StatelessWidget {
         onBackTap: () {
           Navigator.pop(context);
         },
+        showActions: false,
       ),
       backgroundColor: AppColors.white,
       body: LayoutBuilder(
@@ -104,6 +105,7 @@ class Login extends StatelessWidget {
                                   controller: passwordController,
                                   textLabel: "Hasło",
                                   icon: Icons.lock,
+                                  isPassword: true, // dodaje zeby sie tam to oczko pokazalo
                                 ),
                               ),
                               Padding(

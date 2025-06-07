@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/product_model.dart';
+import 'package:frontend/web_api/dto/products.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import 'custom_button.dart';
 import 'custom_outlined_button.dart';
 
 class ProductTile extends StatelessWidget {
-  final ProductModel product;
+  final Product product;
   final VoidCallback onAddCart;
   final VoidCallback onDetails;
 
@@ -36,7 +36,21 @@ class ProductTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(product.name, style: AppTextStyles.subheading),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Center(
+                child: Image.network(
+                  product.imageUrl,
+                  height: 300,
+                  width: 300,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          Text(product.productName, style: AppTextStyles.subheading),
           const Padding(padding: EdgeInsets.only(top: 5)),
           Text(
             '${product.price.toStringAsFixed(2)} zł',
@@ -60,6 +74,5 @@ class ProductTile extends StatelessWidget {
         ],
       ),
     );
-    throw UnimplementedError();
   }
 }
