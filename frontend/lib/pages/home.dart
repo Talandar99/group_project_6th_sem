@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/login.dart';
 import 'package:frontend/pages/product_details_page.dart';
+import 'package:frontend/services/products_connection.dart';
 import 'package:frontend/theme/app_text_styles.dart';
+import 'package:frontend/web_api/dto/products.dart';
+import 'package:get_it/get_it.dart';
 import '../theme/app_colors.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/product_list.dart';
-import '../models/product_model.dart';
-import '../widgets/search_field.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,31 +17,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<ProductModel> _allProducts = [
-    ProductModel(
-      id: 1,
-      name: 'Fotel klasyczny',
-      price: 399.99,
-      amount: 10,
-      description: 'Wygodny fotel z tkaniny, idealny do salonu.',
-    ),
-    ProductModel(
-      id: 2,
-      name: 'Stół dębowy',
-      price: 799.99,
-      amount: 5,
-      description: 'Solidny stół do jadalni, wykonany z drewna dębowego.',
-    ),
-    ProductModel(
-      id: 3,
-      name: 'Sofa 3-osobowa',
-      price: 1299.99,
-      amount: 3,
-      description: 'Elegancka sofa 3-osobowa, doskonała do salonu.',
-    ),
-  ];
+  final ProductsConnection productsConnection = GetIt.I<ProductsConnection>();
 
-  List<ProductModel> _products = [];
+  final List<Product> _allProducts = [];
+
+  List<Product> _products = [];
   String _searchQuery = '';
 
   @override
@@ -52,11 +33,16 @@ class _HomePageState extends State<HomePage> {
   void _onSearchChanged(String query) {
     setState(() {
       _searchQuery = query;
-      _products = _allProducts
-          .where((product) =>
-              product.name.toLowerCase().contains(query.toLowerCase()) ||
-              product.description.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      //_products =
+      //    _allProducts
+      //        .where(
+      //          (product) =>
+      //              product.name.toLowerCase().contains(query.toLowerCase()) ||
+      //              product.description.toLowerCase().contains(
+      //                query.toLowerCase(),
+      //              ),
+      //        )
+      //        .toList();
     });
   }
 
@@ -80,12 +66,18 @@ class _HomePageState extends State<HomePage> {
           final isWideScreen = constraints.maxWidth > 600;
           return ListView(
             padding: EdgeInsets.symmetric(
-              horizontal:
-                  isWideScreen
-                      ? constraints.maxWidth * 0.2
-                      : 20,
+              horizontal: isWideScreen ? constraints.maxWidth * 0.2 : 20,
             ),
             children: [
+              TextButton(
+                onPressed: () async {
+                  //List<Product> apiResponse = await productsConnection
+                  //.getAllProducts(_searchQuery);
+                  //print(apiResponse);
+                  setState(() {});
+                },
+                child: Text("test_button"),
+              ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 40),
                 child: _searchField(),
@@ -93,13 +85,15 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 40),
                 child: ProductList(
+                  searchQuerry: _searchQuery,
                   products: _products,
                   onAddCart: (product) {},
                   onDetails: (product) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProductDetailsPage(product: product),
+                        builder:
+                            (context) => ProductDetailsPage(product: product),
                       ),
                     );
                   },

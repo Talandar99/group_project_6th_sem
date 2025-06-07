@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/product_model.dart';
+import 'package:frontend/web_api/dto/products.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import 'custom_button.dart';
 import 'custom_outlined_button.dart';
 
 class ProductTile extends StatelessWidget {
-  final ProductModel product;
+  final Product product;
   final VoidCallback onAddCart;
   final VoidCallback onDetails;
 
@@ -19,21 +19,6 @@ class ProductTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? imageAsset;
-    switch (product.id) {
-      case 1:
-        imageAsset = 'assets/icons/table.jpg';
-        break;
-      case 2:
-        imageAsset = 'assets/icons/table.jpg';
-        break;
-      case 3:
-        imageAsset = 'assets/icons/table.jpg';
-        break;
-      default:
-        imageAsset = null;
-    }
-
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       padding: const EdgeInsets.all(15),
@@ -51,20 +36,21 @@ class ProductTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (imageAsset != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.asset(
-                  imageAsset,
-                  height: 120,
-                  width: double.infinity,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Center(
+                child: Image.network(
+                  product.imageUrl,
+                  height: 300,
+                  width: 300,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-          Text(product.name, style: AppTextStyles.subheading),
+          ),
+          Text(product.productName, style: AppTextStyles.subheading),
           const Padding(padding: EdgeInsets.only(top: 5)),
           Text(
             '${product.price.toStringAsFixed(2)} zł',
