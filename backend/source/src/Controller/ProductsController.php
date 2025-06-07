@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\EventInterface;
 
 class ProductsController extends AppController {
     public function initialize(): void {
@@ -10,6 +11,25 @@ class ProductsController extends AppController {
         $this->loadComponent('Authentication.Authentication');
 
         $this->Authentication->addUnauthenticatedActions(['index']);
+    }
+    
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        // Dodaj nagłówki CORS do odpowiedzi
+        $this->response = $this->response
+            ->withHeader('Access-Control-Allow-Origin', '*')  // lub konkretna domena np. 'https://example.com'
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+            ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+
+        // Obsługa zapytań preflight - dla metod OPTIONS
+        if ($this->request->getMethod() === 'OPTIONS') {
+            // Ustaw status 200 i zakończ przetwarzanie (żądanie preflight)
+            $this->response = $this->response->withStatus(200);
+            return $this->response;
+        }
+
     }
 
     /**
@@ -31,6 +51,13 @@ class ProductsController extends AppController {
      *         description="Liczba elementów na stronę (domyślnie 10)",
      *         required=false,
      *         @OA\Schema(type="integer", example=10)
+     *     ),
+     *     @OA\Parameter(
+     *         name="s",
+     *         in="query",
+     *         description="Ciąg wyszukiwania",
+     *         required=false,
+     *         @OA\Schema(type="string", example="example_search")
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -69,9 +96,10 @@ class ProductsController extends AppController {
                 'Products.id' => 'desc',
             ]
         ];
-    
-        $products = $this->paginate($this->Products);
-        $count = $this->Products->find('all')->count();
+        $s = $this->request->getQuery('s') ?? '';
+        $find_q = !empty($s) ? ['conditions' => ['OR' => ['Products.product_name LIKE' => "%$s%", 'Products.description LIKE' => "%$s%"]]] : [];
+        $products = $this->paginate($this->Products->find('all', $find_q));
+        $count = $this->Products->find('all',$find_q)->count();
 
         $this->set([
             'success' => true,
