@@ -1,4 +1,5 @@
 import 'package:frontend/pages/home.dart';
+import 'package:frontend/pages/cart.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frontend/services/get_it_dependency_injection.dart';
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Poppins'),
       home: HomePage(),
+      routes: {
+        '/cart': (context) => CartPage(),
+      },
     );
   }
 }
