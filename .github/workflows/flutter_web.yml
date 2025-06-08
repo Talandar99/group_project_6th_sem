@@ -46,6 +46,12 @@ jobs:
           cd build/web
           zip -r ../../../flutter_web_build.zip .
 
+      - name: Build Flutter Apk
+        run: |
+          cd frontend
+          flutter pub get
+          flutter build apk
+
       - name: Get version from pubspec.yaml
         id: get_version
         run: |
@@ -84,7 +90,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.get_version.outputs.VERSION }}
-          name: Flutter Web v${{ steps.get_version.outputs.VERSION }}
+          name: Flutter Web & APK v${{ steps.get_version.outputs.VERSION }}
           body: |
             Automated build for version v${{ steps.get_version.outputs.VERSION }}
-          files: flutter_web_build.zip
+          files: |
+            flutter_web_build.zip
+            frontend/build/app/outputs/flutter-apk/app-release.apk
