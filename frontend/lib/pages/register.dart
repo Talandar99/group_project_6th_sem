@@ -22,12 +22,7 @@ class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Rejestracja',
-        onBackTap: () {
-          Navigator.pop(context);
-        },
-      ),
+      appBar: CustomAppBar(title: 'Rejestracja'),
       backgroundColor: AppColors.white,
       body: LayoutBuilder(
         builder: (context, constraints) {

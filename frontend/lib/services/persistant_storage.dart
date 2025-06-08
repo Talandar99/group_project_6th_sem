@@ -15,13 +15,20 @@ class StorageKeys {
 
 class PersistentStorage {
   CookiesStorage cookiesStorage = CookiesStorage();
-  Future<String?>? getData(StorageKey storageKey) async {
+  Future<String>? getData(StorageKey storageKey) async {
     if (kIsWeb) {
-      return cookiesStorage.getData(storageKey);
+      var value = cookiesStorage.getData(storageKey);
+      if (value == null) {
+        value = "";
+      }
+      return value;
     } else {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String? action = prefs.getString(storageKey.key);
-      return action;
+      String? value = prefs.getString(storageKey.key);
+      if (value == null) {
+        value = "";
+      }
+      return value;
     }
   }
 

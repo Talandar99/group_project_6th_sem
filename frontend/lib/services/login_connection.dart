@@ -25,6 +25,7 @@ class UserConnection {
   }
 
   Future<String> login(EmailPasswordDto emailPasswordDto) async {
+    persistentStorage.saveData(StorageKeys.userEmail, emailPasswordDto.email);
     var response = await apiService.postWithoutToken(
       '$apiHost/users/login',
       emailPasswordDto,

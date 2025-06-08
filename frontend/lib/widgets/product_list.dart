@@ -84,8 +84,7 @@ class _ProductListState extends State<ProductList> {
                 },
               );
             } else {
-              //print(snapshot.toString());
-              return Text("Something went wrong ;/");
+              return Text("");
             }
         }
       },

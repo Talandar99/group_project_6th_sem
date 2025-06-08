@@ -100,13 +100,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: CustomAppBar(
-        title: 'Szczegóły produktu',
-        showActions: false,
-        onBackTap: () {
-          Navigator.pop(context);
-        },
-      ),
+      appBar: CustomAppBar(title: 'Szczegóły produktu', showActions: false),
       body: Center(
         child: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: 800),
