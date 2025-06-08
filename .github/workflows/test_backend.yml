@@ -21,6 +21,12 @@ jobs:
           cd database
           docker compose up -d
           CONTAINER_ID=$(docker compose ps -q postgres)
+
+          until docker exec -i $CONTAINER_ID pg_isready -U user -d db; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 2
+          done
+
           docker cp query.sql $CONTAINER_ID:/tmp/query.sql
           docker exec -i $CONTAINER_ID psql -U user -d db -f /tmp/query.sql
           docker compose down
