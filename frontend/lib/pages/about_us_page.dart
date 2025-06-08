@@ -25,6 +25,7 @@ class AboutUsPage extends StatelessWidget {
       ],
     );
   }
+
   Widget _sectionText(String content) {
     return Text(
       content,
@@ -32,6 +33,7 @@ class AboutUsPage extends StatelessWidget {
       textAlign: TextAlign.justify,
     );
   }
+
   Widget _sectionCard(String title, String content, {Widget? leadingImage}) {
     return Card(
       color: Colors.white.withOpacity(0.95),
@@ -69,10 +71,8 @@ class AboutUsPage extends StatelessWidget {
       backgroundColor: AppColors.iconBackground,
       appBar: CustomAppBar(
         title: 'O nas',
-        onBackTap: () {
-          Navigator.pop(context);
-        },
         showActions: false,
+        showAboutUs: false,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
@@ -89,7 +89,11 @@ class AboutUsPage extends StatelessWidget {
                       'W WoodSpace wierzymy, że każde wnętrze zasługuje na indywidualne podejście. '
                       'Naszą misją jest tworzenie mebli, które są piękne, trwałe i funkcjonalne. '
                       'Wartości, które nami kierują to: jakość, zrównoważony rozwój i szacunek dla rzemiosła.',
-                  leadingImage: Icon(Icons.history, size: 48, color: AppColors.primary),
+                  leadingImage: Icon(
+                    Icons.history,
+                    size: 48,
+                    color: AppColors.primary,
+                  ),
                 ),
                 _sectionCard(
                   'Nasz zespół',
@@ -100,18 +104,28 @@ class AboutUsPage extends StatelessWidget {
                       'Kasia Kowalczyk – ekspertka ds. logistyki, dbająca o organizację\n\n'
                       'Klaudia Młyńska – specjalistka ds. jakości, dbająca o najwyższe standardy\n\n'
                       'Mikołaj Więckowski – specjalista ds. marketingu, promujący markę WoodSpace',
-                  leadingImage: Icon(Icons.group, size: 48, color: AppColors.primary),
+                  leadingImage: Icon(
+                    Icons.group,
+                    size: 48,
+                    color: AppColors.primary,
+                  ),
                 ),
                 _sectionCard(
                   'Nasze osiągnięcia',
                   ' Produkt Roku 2022 w kategorii mebli\n'
                       'Ponad 5000 zadowolonych klientów\n'
                       'Drewno z certyfikatem FSC',
-                  leadingImage: Icon(Icons.emoji_events, size: 48, color: AppColors.primary),
+                  leadingImage: Icon(
+                    Icons.emoji_events,
+                    size: 48,
+                    color: AppColors.primary,
+                  ),
                 ),
                 Card(
                   color: Colors.white.withOpacity(0.95),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                   elevation: 8,
                   margin: const EdgeInsets.symmetric(vertical: 14),
                   child: Padding(
@@ -130,7 +144,10 @@ class AboutUsPage extends StatelessWidget {
                           title: const Text('+48 600 123 456'),
                         ),
                         ListTile(
-                          leading: Icon(Icons.location_on, color: AppColors.primary),
+                          leading: Icon(
+                            Icons.location_on,
+                            color: AppColors.primary,
+                          ),
                           title: const Text('ul. Stolarzy 10, 30-001 Kraków'),
                         ),
                       ],

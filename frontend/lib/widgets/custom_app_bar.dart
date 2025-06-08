@@ -2,6 +2,7 @@ import 'dart:ffi' hide Size;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/pages/about_us_page.dart';
 import 'package:frontend/pages/cart.dart';
 import 'package:frontend/pages/login.dart';
 import 'package:frontend/pages/profile.dart';
@@ -15,13 +16,16 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   bool showActions;
   bool allowBack;
-
+  bool showAboutUs;
+  TextStyle? style;
 
   CustomAppBar({
     super.key,
     required this.title,
     this.showActions = true,
     this.allowBack = true,
+    this.showAboutUs = true,
+    this.style,
   });
 
   @override
@@ -37,12 +41,19 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-
-      title: Text(widget.title, style: AppTextStyles.appBarTitle),
+      title: Text(
+        widget.title,
+        style: widget.style ?? AppTextStyles.appBarTitle,
+      ),
       backgroundColor: AppColors.white,
       elevation: 0,
       centerTitle: true,
-      leading: goBack(context, widget.allowBack),
+      leading: Row(
+        children: [
+          SizedBox(child: goBack(context, widget.allowBack)),
+          showAboutUs(context, widget.showAboutUs),
+        ],
+      ),
       actions: [
         FutureBuilder<List<Widget>>(
           future: getActions(context, widget.showActions, persistentStorage),
@@ -60,6 +71,32 @@ class _CustomAppBarState extends State<CustomAppBar> {
         ),
       ],
     );
+  }
+
+  Widget showAboutUs(BuildContext context, bool showAboutUs) {
+    if (showAboutUs) {
+      return Expanded(
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AboutUsPage()),
+            );
+          },
+          child: Container(
+            margin: const EdgeInsets.all(10),
+            alignment: Alignment.center,
+            width: 37,
+            decoration: BoxDecoration(
+              color: AppColors.iconBackground,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(Icons.info_outline, color: AppColors.iconColor),
+          ),
+        ),
+      );
+    }
+    return Container();
   }
 
   Widget goBack(BuildContext context, bool allowBack) {
@@ -83,7 +120,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         ),
       );
     } else {
-      return Container();
+      return Container(margin: EdgeInsets.all(10));
     }
   }
 }

@@ -11,7 +11,6 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController(text: 'name');
   final _emailController = TextEditingController(text: 'email@xoxo.xoxo');
 
   @override
@@ -39,25 +38,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
                         _buildStaticHeader(),
                         const SizedBox(height: 32),
-
-                        // Imię
-                        TextFormField(
-                          controller: _nameController,
-                          decoration: InputDecoration(
-                            labelText: 'Imię',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Podaj swoje imię';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-
                         // Email
                         TextFormField(
                           controller: _emailController,

@@ -8,7 +8,6 @@ import '../widgets/custom_app_bar.dart';
 import '../widgets/product_list.dart';
 import 'about_us_page.dart';
 
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -25,6 +24,7 @@ class _HomePageState extends State<HomePage> {
       _selectedIndex = index;
     });
   }
+
   String _searchQuery = '';
   @override
   void initState() {
@@ -40,7 +40,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Sklep', showActions: true, allowBack: false),
+      appBar: CustomAppBar(
+        title: 'WoodSpace',
+        style: AppTextStyles.logoText,
+
+        showActions: true,
+        allowBack: false,
+      ),
       backgroundColor: AppColors.white,
       body: LayoutBuilder(
         builder: (context, constraints) {
