@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: instrumentisto/flutter:latest
+
     steps:
       - name: Configure Git safe directory
         run: git config --global --add safe.directory /usr/local/flutter
@@ -21,16 +22,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Git (inside container)
+      - name: Install Git
         run: |
           apt-get update
           apt-get install -y git
+
+      - name: Detect working directory
+        id: detect_dir
+        run: echo "REPO_DIR=$(pwd)" >> $GITHUB_OUTPUT
 
       - name: Update API host in host_ip.dart
         run: |
           sed -i 's|https://localhost:8443|https://projekt.dawtyl.ovh:8443|' frontend/lib/web_api/host_ip.dart
 
-      - name: Check modified host_ip.dart
+      - name: Show updated host_ip.dart
         run: cat frontend/lib/web_api/host_ip.dart
 
       - name: Build Flutter Web
@@ -50,6 +55,7 @@ jobs:
       - name: Check if tag exists
         id: check_tag
         run: |
+          cd "${{ steps.detect_dir.outputs.REPO_DIR }}"
           TAG="v${{ steps.get_version.outputs.VERSION }}"
           if git ls-remote --tags origin | grep -q "refs/tags/$TAG"; then
             echo "EXISTS=true" >> $GITHUB_OUTPUT
@@ -57,23 +63,17 @@ jobs:
             echo "EXISTS=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Sprawdź katalog roboczy i zawartość
-        run: |
-          echo "Aktualny katalog roboczy:"
-          pwd
-          echo "Zawartość katalogu:"
-          ls -la
       - name: Set up Git for tagging
         if: steps.check_tag.outputs.EXISTS == 'false'
         run: |
-          cd /github/workspace
+          cd "${{ steps.detect_dir.outputs.REPO_DIR }}"
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
       - name: Create and push Git tag
         if: steps.check_tag.outputs.EXISTS == 'false'
         run: |
-          cd /github/workspace
+          cd "${{ steps.detect_dir.outputs.REPO_DIR }}"
           TAG="v${{ steps.get_version.outputs.VERSION }}"
           git tag "$TAG"
           git push origin "$TAG"
@@ -85,5 +85,5 @@ jobs:
           tag_name: v${{ steps.get_version.outputs.VERSION }}
           name: Flutter Web v${{ steps.get_version.outputs.VERSION }}
           body: |
-            Automatyczny build dla wersji: v${{ steps.get_version.outputs.VERSION }}
+            Automated build for version v${{ steps.get_version.outputs.VERSION }}
           files: flutter_web_build.zip
