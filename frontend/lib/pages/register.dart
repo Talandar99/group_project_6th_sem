@@ -82,7 +82,7 @@ class Register extends StatelessWidget {
                                               password: passwordController.text,
                                             ),
                                           );
-                                      displaySnackbar(context, message);
+                                      showCustomSnackBar(context, message);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -90,7 +90,7 @@ class Register extends StatelessWidget {
                                         ),
                                       );
                                     } catch (e) {
-                                      displaySnackbar(
+                                      showCustomSnackBar(
                                         context,
                                         "Rejestracja nie powiodła się",
                                       );

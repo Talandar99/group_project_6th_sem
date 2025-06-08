@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/services/cart_service.dart';
 import 'package:frontend/web_api/dto/products.dart';
+import 'package:frontend/widgets/custom_alert.dart';
+import 'package:frontend/widgets/custom_snackbar.dart';
 import 'package:frontend/widgets/page_indicator_dots.dart';
+import 'package:get_it/get_it.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../widgets/product_action_buttons.dart';
@@ -43,49 +47,21 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   void _incrementQuantity() {
     if (quantity >= widget.product.amountInStock) {
-      _showAlert('Nie ma już więcej sztuk tego produktu.');
+      showAlert('Nie ma już więcej sztuk tego produktu.', context);
       return;
     }
-    setState(() => quantity++);
+    cartService.addItemToCart(widget.product);
   }
 
   void _decrementQuantity() {
     if (quantity > 1) {
+      cartService.removeItemFromCart(widget.product);
       setState(() => quantity--);
     }
   }
 
-  void _showAlert(String message) {
-    showDialog(
-      context: context,
-      builder:
-          (_) => AlertDialog(
-            title: Text('Uwaga'),
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('OK'),
-              ),
-            ],
-          ),
-    );
-  }
-
   void _addToCart() {
-    // Przekazanie produktu do koszyka przez Navigator
-    Navigator.pushNamed(
-      context,
-      '/cart',
-      arguments: {
-        'id': widget.product.id,
-        'name': widget.product.productName,
-        'description': widget.product.description,
-        'price': widget.product.price,
-        'image': 'assets/icons/table.jpg',
-        'quantity': quantity,
-      },
-    );
+    cartService.addItemToCart(widget.product);
     setState(() => showSuccess = true);
     Future.delayed(Duration(seconds: 2), () {
       setState(() => showSuccess = false);
@@ -94,14 +70,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   void _buyNow() {
     print('Kup teraz: ${widget.product.productName}, ilość: $quantity');
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('Dziękujemy za zakup!')));
+    showCustomSnackBar(context, 'Dziękujemy za zakup!');
   }
 
-  void _goToCart() {
-    Navigator.pushNamed(context, '/cart');
-  }
+  //void _goToCart() {
+  //  Navigator.pushNamed(context, '/cart');
+  //}
 
   void _nextImage() {
     if (_currentPage < imageUrls.length - 1) {
@@ -121,6 +95,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     }
   }
 
+  final CartService cartService = GetIt.I<CartService>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -249,7 +224,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               ),
               Padding(padding: EdgeInsets.only(top: 24)),
               ProductActionButtons(onAddToCart: _addToCart, onBuyNow: _buyNow),
-
               Padding(
                 padding: EdgeInsets.only(top: 20),
                 child: AnimatedOpacity(

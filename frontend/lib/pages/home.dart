@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/login.dart';
 import 'package:frontend/pages/product_details_page.dart';
-import 'package:frontend/services/products_connection.dart';
+import 'package:frontend/services/cart_service.dart';
 import 'package:frontend/theme/app_text_styles.dart';
-import 'package:frontend/web_api/dto/products.dart';
 import 'package:get_it/get_it.dart';
 import '../theme/app_colors.dart';
 import '../widgets/custom_app_bar.dart';
@@ -17,32 +16,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final ProductsConnection productsConnection = GetIt.I<ProductsConnection>();
+  final CartService cartService = GetIt.I<CartService>();
 
-  final List<Product> _allProducts = [];
-
-  List<Product> _products = [];
   String _searchQuery = '';
-
   @override
   void initState() {
     super.initState();
-    _products = List.from(_allProducts);
   }
 
   void _onSearchChanged(String query) {
     setState(() {
       _searchQuery = query;
-      //_products =
-      //    _allProducts
-      //        .where(
-      //          (product) =>
-      //              product.name.toLowerCase().contains(query.toLowerCase()) ||
-      //              product.description.toLowerCase().contains(
-      //                query.toLowerCase(),
-      //              ),
-      //        )
-      //        .toList();
     });
   }
 
@@ -69,15 +53,6 @@ class _HomePageState extends State<HomePage> {
               horizontal: isWideScreen ? constraints.maxWidth * 0.2 : 20,
             ),
             children: [
-              TextButton(
-                onPressed: () async {
-                  //List<Product> apiResponse = await productsConnection
-                  //.getAllProducts(_searchQuery);
-                  //print(apiResponse);
-                  setState(() {});
-                },
-                child: Text("test_button"),
-              ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 40),
                 child: _searchField(),
@@ -86,8 +61,6 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(bottom: 40),
                 child: ProductList(
                   searchQuerry: _searchQuery,
-                  products: _products,
-                  onAddCart: (product) {},
                   onDetails: (product) {
                     Navigator.push(
                       context,
