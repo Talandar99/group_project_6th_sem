@@ -3,7 +3,6 @@ import 'dart:ffi' hide Size;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/pages/cart.dart';
-import 'package:frontend/pages/home.dart';
 import 'package:frontend/pages/login.dart';
 import 'package:frontend/pages/profile.dart';
 import 'package:frontend/services/persistant_storage.dart';
