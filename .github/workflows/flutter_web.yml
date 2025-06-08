@@ -6,6 +6,9 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,14 +17,17 @@ jobs:
     steps:
       - name: Configure Git safe directory
         run: git config --global --add safe.directory /usr/local/flutter
+
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Update API host in host_ip.dart
         run: |
           sed -i 's|https://localhost:8443|https://projekt.dawtyl.ovh:8443|' frontend/lib/web_api/host_ip.dart
-      - name: Update test adres in host_ip.dart
-        run: |
-          cat frontend/lib/web_api/host_ip.dart
+
+      - name: Check modified host_ip.dart
+        run: cat frontend/lib/web_api/host_ip.dart
+
       - name: Build Flutter Web
         run: |
           cd frontend
@@ -30,8 +36,40 @@ jobs:
           cd build/web
           zip -r ../../../flutter_web_build.zip .
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Get version from pubspec.yaml
+        id: get_version
+        run: |
+          VERSION=$(grep '^version:' frontend/pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          TAG="v${{ steps.get_version.outputs.VERSION }}"
+          if git ls-remote --tags origin | grep -q "refs/tags/$TAG"; then
+            echo "EXISTS=true" >> $GITHUB_OUTPUT
+          else
+            echo "EXISTS=false" >> $GITHUB_OUTPUT
+
+      - name: Set up Git for tagging
+        if: steps.check_tag.outputs.EXISTS == 'false'
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Create and push Git tag
+        if: steps.check_tag.outputs.EXISTS == 'false'
+        run: |
+          TAG="v${{ steps.get_version.outputs.VERSION }}"
+          git tag "$TAG"
+          git push origin "$TAG"
+
+      - name: Create GitHub Release
+        if: steps.check_tag.outputs.EXISTS == 'false'
+        uses: softprops/action-gh-release@v2
         with:
-          name: flutter_web_build
-          path: flutter_web_build.zip
+          tag_name: v${{ steps.get_version.outputs.VERSION }}
+          name: Flutter Web v${{ steps.get_version.outputs.VERSION }}
+          body: |
+            Automatyczny build dla wersji: v${{ steps.get_version.outputs.VERSION }}
+          files: flutter_web_build.zip
