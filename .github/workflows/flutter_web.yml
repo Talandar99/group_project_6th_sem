@@ -49,9 +49,8 @@ jobs:
       - name: Check if tag exists
         id: check_tag
         run: |
-          cd "${{ steps.detect_dir.outputs.REPO_DIR }}"
           TAG="v${{ steps.get_version.outputs.VERSION }}"
-          if git ls-remote --tags origin | grep -q "refs/tags/$TAG"; then
+          if git ls-remote --tags https://github.com/${{ github.repository }} | grep -q "refs/tags/$TAG"; then
             echo "EXISTS=true" >> $GITHUB_OUTPUT
           else
             echo "EXISTS=false" >> $GITHUB_OUTPUT
