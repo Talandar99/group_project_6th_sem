@@ -12,8 +12,10 @@ import '../theme/app_text_styles.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
+
   bool showActions;
   bool allowBack;
+
 
   CustomAppBar({
     super.key,
@@ -35,6 +37,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+
       title: Text(widget.title, style: AppTextStyles.appBarTitle),
       backgroundColor: AppColors.white,
       elevation: 0,
