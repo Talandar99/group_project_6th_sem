@@ -9,7 +9,7 @@ import 'package:frontend/web_api/dto/email_password.dart';
 import 'package:frontend/web_api/http_override.dart';
 import 'package:get_it/get_it.dart';
 
-oid main() {
+void main() {
   HttpOverrides.global = MyHttpOverrides();
   runApp(MyApp());
 }
