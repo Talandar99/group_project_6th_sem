@@ -1,0 +1,49 @@
+name: Backend Testing
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker Compose environment
+        run: |
+          cd database
+          docker compose up -d
+
+      - name: Populate database
+        run: sudo ./scripts/pgsql_execute_database_querry.sh
+        shell: bash
+
+      - name: Tear down Docker Compose environment
+        run: |
+          cd database
+          docker compose down
+
+      - name: Run backend setup
+        run: sudo ./scripts/setupdocker_backend.sh
+        shell: bash
+
+      - name: Set up Python environment
+        run: |
+          cd tests
+          python3 -m venv venv
+          . venv/bin/activate
+          pip install --upgrade pip
+          pip install robotframework-requests
+
+      - name: Run Robot Framework tests
+        run: |
+          cd tests
+          . venv/bin/activate
+          robot tests.robot
