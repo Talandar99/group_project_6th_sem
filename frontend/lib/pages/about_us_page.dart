@@ -112,7 +112,7 @@ class AboutUsPage extends StatelessWidget {
                 ),
                 _sectionCard(
                   'Nasze osiągnięcia',
-                  ' Produkt Roku 2022 w kategorii mebli\n'
+                  'Produkt Roku 2022 w kategorii mebli\n'
                       'Ponad 5000 zadowolonych klientów\n'
                       'Drewno z certyfikatem FSC',
                   leadingImage: Icon(

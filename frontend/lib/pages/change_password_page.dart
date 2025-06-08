@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/services/login_connection.dart';
+import 'package:frontend/web_api/dto/email_password.dart';
+import 'package:frontend/widgets/custom_snackbar.dart';
+import 'package:get_it/get_it.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
@@ -10,13 +14,14 @@ class ChangePasswordPage extends StatefulWidget {
 }
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
-  final _currentPasswordController = TextEditingController();
+  //final _currentPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _repeatPasswordController = TextEditingController();
 
-  bool _showCurrentPassword = false;
+  //bool _showCurrentPassword = false;
   bool _showNewPassword = false;
   bool _showRepeatPassword = false;
+  final UserConnection userConnection = GetIt.I<UserConnection>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,19 +46,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
                       _buildStaticHeader(),
                       const SizedBox(height: 32),
-
-                      // Obecne hasło
-                      _buildPasswordField(
-                        controller: _currentPasswordController,
-                        label: 'Obecne hasło',
-                        isVisible: _showCurrentPassword,
-                        toggleVisibility: () {
-                          setState(() {
-                            _showCurrentPassword = !_showCurrentPassword;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 16),
 
                       // Nowe hasło
                       _buildPasswordField(
@@ -85,8 +77,23 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       SizedBox(
                         height: 50,
                         child: ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.pop(context);
+                          onPressed: () async {
+                            if (_newPasswordController.text ==
+                                _repeatPasswordController.text) {
+                              var message = await userConnection.editUser(
+                                EmailPasswordDto(
+                                  email: "",
+                                  password: _newPasswordController.text,
+                                ),
+                              );
+                              //showCustomSnackBar(context, message);
+                              Navigator.pop(context);
+                            } else {
+                              showCustomSnackBar(
+                                context,
+                                "Hasła muszą być identyczne",
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
@@ -135,7 +142,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         ),
         const SizedBox(height: 6),
         Text(
-          'Wprowadź aktualne i nowe hasło',
+          'Wprowadź nowe hasło',
           style: AppTextStyles.subheading.copyWith(
             fontSize: 14,
             color: Colors.grey,

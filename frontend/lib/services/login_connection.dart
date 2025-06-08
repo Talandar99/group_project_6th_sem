@@ -42,6 +42,9 @@ class UserConnection {
   }
 
   Future<String> editUser(EmailPasswordDto emailPasswordDto) async {
+    if (emailPasswordDto.email.isNotEmpty) {
+      persistentStorage.saveData(StorageKeys.userEmail, emailPasswordDto.email);
+    }
     var response = await apiService.post(
       '$apiHost/users/edit',
       emailPasswordDto,
@@ -50,6 +53,7 @@ class UserConnection {
     if (response.statusCode == 200) {
       var decodedBody = json.decode(response.body);
       var message = MessageDto.fromJson(decodedBody);
+      print(message.message);
       return message.message;
     } else {
       throw Exception('ERROR: ${response.statusCode}');

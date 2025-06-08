@@ -21,6 +21,7 @@ class ProductDetailsPage extends StatefulWidget {
 }
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
+  final CartService cartService = GetIt.I<CartService>();
   int quantity = 1;
   List<String> imageUrls = [];
   late PageController _pageController;
@@ -50,18 +51,21 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       showAlert('Nie ma już więcej sztuk tego produktu.', context);
       return;
     }
-    cartService.addItemToCart(widget.product);
+    setState(() {
+      cartService.addItemToCart(widget.product);
+    });
   }
 
   void _decrementQuantity() {
-    if (quantity > 1) {
+    setState(() {
       cartService.removeItemFromCart(widget.product);
-      setState(() => quantity--);
-    }
+    });
   }
 
   void _addToCart() {
-    cartService.addItemToCart(widget.product);
+    setState(() {
+      cartService.addItemToCart(widget.product);
+    });
     setState(() => showSuccess = true);
     Future.delayed(Duration(seconds: 2), () {
       setState(() => showSuccess = false);
@@ -95,7 +99,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     }
   }
 
-  final CartService cartService = GetIt.I<CartService>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,7 +167,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   Row(
                     children: [
                       InkWell(
-                        onTap: quantity > 1 ? _decrementQuantity : null,
+                        onTap: _decrementQuantity,
                         borderRadius: BorderRadius.circular(100),
                         child: Container(
                           width: 36,
@@ -192,7 +195,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          quantity.toString(),
+                          cartService
+                              .getItemQuantityByProduct(widget.product)
+                              .toString(),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
