@@ -42,4 +42,13 @@ class AppTextStyles {
     fontSize: 14,
     color: Color(0xffDDDADA),
   );
+
+  static const TextStyle logoText = TextStyle(
+    fontFamily: 'Poppins',
+    fontWeight: FontWeight.w800,
+    fontSize: 28,
+    color: AppColors.primary,
+    letterSpacing: 1.2,
+  );
 }
+

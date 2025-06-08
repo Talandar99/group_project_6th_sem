@@ -7,6 +7,8 @@ import 'package:get_it/get_it.dart';
 import '../theme/app_colors.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/product_list.dart';
+import 'about_us_page.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,7 +19,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final CartService cartService = GetIt.I<CartService>();
+  int _selectedIndex = 0;
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
   String _searchQuery = '';
   @override
   void initState() {
@@ -34,11 +42,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Sklep',
+        title: 'WoodSpace',
+          style: AppTextStyles.logoText,
         onProfileTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Login()),
+          );
+        },
+        onInfoTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AboutUsPage()),
           );
         },
         showActions: true,

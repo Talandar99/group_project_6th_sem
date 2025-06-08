@@ -9,43 +9,63 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback? onProfileTap;
   final VoidCallback? onBackTap;
+  final VoidCallback? onInfoTap;
   final bool showActions;
+  final TextStyle? style;
 
   const CustomAppBar({
     super.key,
     required this.title,
     this.onProfileTap,
     this.onBackTap,
+    this.onInfoTap,
     this.showActions = true,
+    this.style,
+
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title, style: AppTextStyles.appBarTitle),
+      title: Text(title, style: style ?? AppTextStyles.appBarTitle,),
       backgroundColor: AppColors.white,
       elevation: 0,
       centerTitle: true,
-      leading: onBackTap == null
-          ? null
-          : GestureDetector(
-              onTap: onBackTap ?? () {
-                Navigator.maybePop(context);
-              },
-              child: Container(
-                margin: EdgeInsets.all(10),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: AppColors.iconBackground,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: SvgPicture.asset(
-                  'assets/icons/Arrow - Left 2.svg',
-                  height: 20,
-                  width: 20,
-                ),
+      leading: () {
+        if (onBackTap != null) {
+          return GestureDetector(
+            onTap: onBackTap!,
+            child: Container(
+              margin: EdgeInsets.all(10),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: AppColors.iconBackground,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: SvgPicture.asset(
+                'assets/icons/Arrow - Left 2.svg',
+                height: 20,
+                width: 20,
               ),
             ),
+          );
+        } else if (onInfoTap != null) {
+          return GestureDetector(
+            onTap: onInfoTap!,
+            child: Container(
+              margin: const EdgeInsets.all(10),
+              alignment: Alignment.center,
+              width: 37,
+              decoration: BoxDecoration(
+                color: AppColors.iconBackground,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(Icons.info_outline, color: AppColors.iconColor),
+            ),
+          );
+        }
+        return null;
+      }(),
       actions: showActions
           ? [
               GestureDetector(
