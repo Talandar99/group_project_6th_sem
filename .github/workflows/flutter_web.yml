@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: write
-  workflows: write
 
 jobs:
   build:
@@ -53,6 +52,14 @@ jobs:
           flutter pub get
           flutter build apk
 
+      - name: Build Flutter Linux
+        run: |
+          cd frontend
+          flutter config --enable-linux-desktop
+          flutter build linux
+          cd build/linux/x64/release
+          zip -r ../../../../../flutter_linux_build.zip bundle
+
       - name: Get version from pubspec.yaml
         id: get_version
         run: |
@@ -96,4 +103,5 @@ jobs:
             Automated build for version v${{ steps.get_version.outputs.VERSION }}
           files: |
             flutter_web_build.zip
+            flutter_linux_build.zip
             frontend/build/app/outputs/flutter-apk/app-release.apk
