@@ -1,5 +1,3 @@
-import 'dart:ffi' hide Size;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/pages/about_us_page.dart';

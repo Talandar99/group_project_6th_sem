@@ -40,4 +40,19 @@ class UserConnection {
       throw Exception(response.statusCode);
     }
   }
+
+  Future<String> editUser(EmailPasswordDto emailPasswordDto) async {
+    var response = await apiService.post(
+      '$apiHost/users/edit',
+      emailPasswordDto,
+    );
+
+    if (response.statusCode == 200) {
+      var decodedBody = json.decode(response.body);
+      var message = MessageDto.fromJson(decodedBody);
+      return message.message;
+    } else {
+      throw Exception('ERROR: ${response.statusCode}');
+    }
+  }
 }
