@@ -10,6 +10,9 @@ jobs:
       image: instrumentisto/flutter:latest
 
     steps:
+      - name: Configure Git safe directory
+        run: git config --global --add safe.directory /usr/local/flutter
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
