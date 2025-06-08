@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - backend
   workflow_dispatch:
 
 jobs:
@@ -30,11 +31,6 @@ jobs:
           docker cp query.sql $CONTAINER_ID:/tmp/query.sql
           docker exec -i $CONTAINER_ID psql -U user -d db -f /tmp/query.sql
           docker compose down
-      - name: Debug repo files
-        run: |
-          pwd
-          ls -la
-          ls -la scripts
 
       - name: Run backend setup
         run: sudo ./scripts/backend_run_docker_container.sh
