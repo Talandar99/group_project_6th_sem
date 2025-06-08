@@ -21,6 +21,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install Git (inside container)
+        run: |
+          apt-get update
+          apt-get install -y git
+
       - name: Update API host in host_ip.dart
         run: |
           sed -i 's|https://localhost:8443|https://projekt.dawtyl.ovh:8443|' frontend/lib/web_api/host_ip.dart
@@ -55,13 +60,14 @@ jobs:
       - name: Set up Git for tagging
         if: steps.check_tag.outputs.EXISTS == 'false'
         run: |
-          cd $GITHUB_WORKSPACE
+          cd /github/workspace
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
       - name: Create and push Git tag
         if: steps.check_tag.outputs.EXISTS == 'false'
         run: |
+          cd /github/workspace
           TAG="v${{ steps.get_version.outputs.VERSION }}"
           git tag "$TAG"
           git push origin "$TAG"
