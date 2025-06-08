@@ -1,3 +1,3 @@
 String get apiHost {
-  return 'https://localhost:8443';
+  return 'http://localhost:8080';
 }

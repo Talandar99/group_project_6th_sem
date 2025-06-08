@@ -24,13 +24,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Logowanie',
-        onBackTap: () {
-          Navigator.pop(context);
-        },
-        showActions: false,
-      ),
+      appBar: CustomAppBar(title: 'Logowanie'),
       backgroundColor: AppColors.white,
       body: LayoutBuilder(
         builder: (context, constraints) {

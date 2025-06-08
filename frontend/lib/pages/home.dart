@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/pages/login.dart';
 import 'package:frontend/pages/product_details_page.dart';
 import 'package:frontend/services/cart_service.dart';
 import 'package:frontend/theme/app_text_styles.dart';
@@ -41,24 +40,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'WoodSpace',
-          style: AppTextStyles.logoText,
-        onProfileTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Login()),
-          );
-        },
-        onInfoTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AboutUsPage()),
-          );
-        },
-        showActions: true,
-        onBackTap: null,
-      ),
+      appBar: CustomAppBar(title: 'Sklep', showActions: true, allowBack: false),
       backgroundColor: AppColors.white,
       body: LayoutBuilder(
         builder: (context, constraints) {
