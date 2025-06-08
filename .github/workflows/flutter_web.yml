@@ -22,6 +22,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install Git
+        run: |
+          apt-get update
+          apt-get install -y git
+
+      - name: Detect working directory
+        id: detect_dir
+        run: echo "REPO_DIR=$(pwd)" >> $GITHUB_OUTPUT
+
+      - name: Update API host in host_ip.dart
+        run: |
+          sed -i 's|https://localhost:8443|https://projekt.dawtyl.ovh:8443|' frontend/lib/web_api/host_ip.dart
+
+      - name: Show updated host_ip.dart
+        run: cat frontend/lib/web_api/host_ip.dart
+
       - name: Get version from pubspec.yaml
         id: get_version
         run: |
@@ -39,21 +55,11 @@ jobs:
             echo "EXISTS=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Install Git
+      - name: Stop if tag exists
+        if: steps.check_tag.outputs.EXISTS == 'true'
         run: |
-          apt-get update
-          apt-get install -y git
-
-      - name: Detect working directory
-        id: detect_dir
-        run: echo "REPO_DIR=$(pwd)" >> $GITHUB_OUTPUT
-
-      - name: Update API host in host_ip.dart
-        run: |
-          sed -i 's|https://localhost:8443|https://projekt.dawtyl.ovh:8443|' frontend/lib/web_api/host_ip.dart
-
-      - name: Show updated host_ip.dart
-        run: cat frontend/lib/web_api/host_ip.dart
+          echo "Tag ${{ steps.get_version.outputs.VERSION }} already exists. Skipping build."
+          exit 0
 
       - name: Build Flutter Web
         run: |
@@ -76,15 +82,6 @@ jobs:
           flutter build linux
           cd build/linux/x64/release
           zip -r ../../../../../flutter_linux_build.zip bundle
-
-
-      - name: Set up Git for tagging
-        if: steps.check_tag.outputs.EXISTS == 'false'
-        run: |
-          cd "${{ steps.detect_dir.outputs.REPO_DIR }}"
-          git config --global --add safe.directory "$(pwd)"
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
 
       - name: Create and push Git tag
         if: steps.check_tag.outputs.EXISTS == 'false'
