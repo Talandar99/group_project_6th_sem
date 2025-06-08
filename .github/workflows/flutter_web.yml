@@ -50,6 +50,7 @@ jobs:
             echo "EXISTS=true" >> $GITHUB_OUTPUT
           else
             echo "EXISTS=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Set up Git for tagging
         if: steps.check_tag.outputs.EXISTS == 'false'
