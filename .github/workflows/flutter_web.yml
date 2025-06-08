@@ -1,4 +1,4 @@
-name: Build Flutter Web and APK
+name: Build Flutter Web,APK,Linux
 
 on:
   push:
@@ -97,7 +97,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.get_version.outputs.VERSION }}
-          name: Flutter Web & APK v${{ steps.get_version.outputs.VERSION }}
+          name: Flutter Web, APK and Linux builds v${{ steps.get_version.outputs.VERSION }}
           body: |
             Automated build for version v${{ steps.get_version.outputs.VERSION }}
           files: |
