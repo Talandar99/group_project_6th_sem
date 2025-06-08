@@ -37,7 +37,7 @@ jobs:
           ls -la scripts
 
       - name: Run backend setup
-        run: sudo ./scripts/setupdocker_backend.sh
+        run: sudo ./scripts/backend_run_docker_container.sh
         shell: bash
 
       - name: Set up Python environment
