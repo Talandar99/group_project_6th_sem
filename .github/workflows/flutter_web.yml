@@ -57,6 +57,12 @@ jobs:
             echo "EXISTS=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Sprawdź katalog roboczy i zawartość
+        run: |
+          echo "Aktualny katalog roboczy:"
+          pwd
+          echo "Zawartość katalogu:"
+          ls -la
       - name: Set up Git for tagging
         if: steps.check_tag.outputs.EXISTS == 'false'
         run: |
