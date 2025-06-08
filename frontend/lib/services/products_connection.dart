@@ -18,6 +18,7 @@ class ProductsConnection {
 
     //print(response.body.toString());
     ProductsDto decodedResponse = ProductsDto.fromJson(decodedBody);
+    print(decodedResponse.data[0].imageUrl);
 
     return decodedResponse.data;
   }
