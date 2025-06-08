@@ -13,41 +13,6 @@ import '../widgets/custom_button.dart';
 import '../widgets/create_account_button.dart';
 import '../widgets/custom_app_bar.dart';
 
-//  Future<void> registerTest() async {
-//    var x = await loginConnectionService.register(
-//      EmailPasswordDto(
-//        email: "user@example.com",
-//        password: "securepassword123",
-//      ),
-//    );
-//    print("=========================================");
-//    print("status code");
-//    print("-----------------------------------------");
-//    print(x);
-//    print("=========================================");
-//    setState(() {
-//      text = "This is register status code:";
-//      token = x.toString();
-//    });
-//  }
-//
-//  Future<void> loginTest() async {
-//    var x = await loginConnectionService.login(
-//      EmailPasswordDto(
-//        email: "user@example.com",
-//        password: "securepassword123",
-//      ),
-//    );
-//    print("=========================================");
-//    print("token");
-//    print("-----------------------------------------");
-//    print(x.token);
-//    print("=========================================");
-//    setState(() {
-//      text = "This is your token:";
-//      token = x.token;
-//    });
-//  }
 class Login extends StatelessWidget {
   Login({super.key});
 
@@ -105,7 +70,8 @@ class Login extends StatelessWidget {
                                   controller: passwordController,
                                   textLabel: "Hasło",
                                   icon: Icons.lock,
-                                  isPassword: true, // dodaje zeby sie tam to oczko pokazalo
+                                  isPassword:
+                                      true, // dodaje zeby sie tam to oczko pokazalo
                                 ),
                               ),
                               Padding(
@@ -125,7 +91,7 @@ class Login extends StatelessWidget {
                                               password: passwordController.text,
                                             ),
                                           );
-                                      displaySnackbar(context, message);
+                                      showCustomSnackBar(context, message);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -133,7 +99,7 @@ class Login extends StatelessWidget {
                                         ),
                                       );
                                     } catch (e) {
-                                      displaySnackbar(
+                                      showCustomSnackBar(
                                         context,
                                         "Logowanie Nie Powiodło się",
                                       );

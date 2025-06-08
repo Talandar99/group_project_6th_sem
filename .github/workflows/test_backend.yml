@@ -1,0 +1,51 @@
+name: Backend Testing
+
+on:
+  push:
+    branches:
+      - main
+      - backend
+  workflow_dispatch:
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup and populate database
+        run: |
+          cd database
+          docker compose up -d
+          CONTAINER_ID=$(docker compose ps -q postgres)
+
+          until docker exec -i $CONTAINER_ID pg_isready -U user -d db; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 2
+          done
+
+          docker cp query.sql $CONTAINER_ID:/tmp/query.sql
+          docker exec -i $CONTAINER_ID psql -U user -d db -f /tmp/query.sql
+          docker compose down
+
+      - name: Run backend setup
+        run: sudo ./scripts/backend_run_docker_container.sh
+        shell: bash
+
+      - name: Set up Python environment
+        run: |
+          cd tests
+          python3 -m venv venv
+          . venv/bin/activate
+          pip install --upgrade pip
+          pip install robotframework-requests
+
+      - name: Run Robot Framework tests
+        run: |
+          cd tests
+          . venv/bin/activate
+          robot tests.robot

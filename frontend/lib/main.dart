@@ -27,9 +27,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Poppins'),
       home: HomePage(),
-      routes: {
-        '/cart': (context) => CartPage(),
-      },
+      routes: {'/cart': (context) => CartPage()},
     );
   }
 }

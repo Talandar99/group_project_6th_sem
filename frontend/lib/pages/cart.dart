@@ -1,24 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/services/cart_service.dart';
+import 'package:get_it/get_it.dart';
 import '../theme/app_colors.dart';
 import '../widgets/custom_app_bar.dart';
-
-class CartItem {
-  final int id;
-  final String name;
-  final String description;
-  final double price;
-  final String image;
-  int quantity;
-
-  CartItem({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.image,
-    this.quantity = 1,
-  });
-}
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -28,69 +12,28 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  List<CartItem> cartItems = [
-    CartItem(
-      id: 1,
-      name: 'Fotel klasyczny',
-      description: 'Wygodny fotel z tkaniny, idealny do salonu.',
-      price: 399.99,
-      image: 'assets/icons/table.jpg',
-      quantity: 2,
-    ),
-    CartItem(
-      id: 2,
-      name: 'Stół dębowy',
-      description: 'Solidny stół do jadalni, wykonany z drewna dębowego.',
-      price: 799.99,
-      image: 'assets/icons/table.jpg',
-      quantity: 1,
-    ),
-    CartItem(
-      id: 3,
-      name: 'Sofa 3-osobowa',
-      description: 'Elegancka sofa 3-osobowa, doskonała do salonu.',
-      price: 1299.99,
-      image: 'assets/icons/table.jpg',
-      quantity: 1,
-    ),
-  ];
-
-  double get totalPrice =>
-      cartItems.fold(0, (sum, item) => sum + item.price * item.quantity);
-
-  void increaseQuantity(int index) {
-    setState(() {
-      cartItems[index].quantity++;
-    });
-  }
-
-  void decreaseQuantity(int index) {
-    setState(() {
-      cartItems[index].quantity--;
-      if (cartItems[index].quantity <= 0) {
-        cartItems.removeAt(index);
-      }
-    });
-  }
-
+  final CartService cartService = GetIt.I<CartService>();
   Widget quantitySelector(int index) {
     return Row(
       children: [
         InkWell(
-          onTap: () => decreaseQuantity(index),
+          onTap:
+              () => setState(() {
+                cartService.decreaseItemQuantityAtIndex(index);
+              }),
           borderRadius: BorderRadius.circular(100),
           child: Container(
             width: 36,
             height: 36,
             decoration: BoxDecoration(
               color:
-                  cartItems[index].quantity <= 0
+                  cartService.getItemQuantityAtIndex(index) <= 0
                       ? Colors.grey[100]
                       : AppColors.white,
               borderRadius: BorderRadius.circular(100),
               border: Border.all(
                 color:
-                    cartItems[index].quantity <= 0
+                    cartService.getItemQuantityAtIndex(index) <= 0
                         ? Colors.grey[200]!
                         : Colors.grey[300]!,
               ),
@@ -98,7 +41,7 @@ class _CartPageState extends State<CartPage> {
             child: Icon(
               Icons.remove,
               color:
-                  cartItems[index].quantity <= 0
+                  cartService.getItemQuantityAtIndex(index) <= 0
                       ? Colors.grey[400]
                       : Colors.black,
             ),
@@ -107,12 +50,15 @@ class _CartPageState extends State<CartPage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            '${cartItems[index].quantity}',
+            '${cartService.getItemQuantityAtIndex(index)}',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
         InkWell(
-          onTap: () => increaseQuantity(index),
+          onTap:
+              () => setState(() {
+                cartService.increaseItemQuantityAtIndex(index);
+              }),
           borderRadius: BorderRadius.circular(100),
           child: Container(
             width: 36,
@@ -129,41 +75,8 @@ class _CartPageState extends State<CartPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final args = ModalRoute.of(context)?.settings.arguments;
-    if (args is Map) {
-      final int id = args['id'];
-      final String name = args['name'];
-      final String description = args['description'];
-      final double price = args['price'];
-      final String image = args['image'];
-      final int quantity = args['quantity'];
-
-      final existingIndex = cartItems.indexWhere((item) => item.id == id);
-      if (existingIndex >= 0) {
-        setState(() {
-          cartItems[existingIndex].quantity += quantity;
-        });
-      } else {
-        setState(() {
-          cartItems.add(
-            CartItem(
-              id: id,
-              name: name,
-              description: description,
-              price: price,
-              image: image,
-              quantity: quantity,
-            ),
-          );
-        });
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    List<CartItem> cartItems = cartService.getAllItemsFromCart();
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: CustomAppBar(
@@ -185,7 +98,7 @@ class _CartPageState extends State<CartPage> {
                 children: [
                   Expanded(
                     child: ListView.builder(
-                      itemCount: cartItems.length,
+                      itemCount: cartService.cartItems.length,
                       itemBuilder: (context, index) {
                         final item = cartItems[index];
                         return Container(
@@ -215,16 +128,7 @@ class _CartPageState extends State<CartPage> {
                                   color: Colors.grey[200],
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child:
-                                    item.image.isNotEmpty
-                                        ? Image.asset(
-                                          item.image,
-                                          fit: BoxFit.contain,
-                                        )
-                                        : const Icon(
-                                          Icons.image,
-                                          color: Colors.black,
-                                        ),
+                                child: Image.network(item.product.imageUrl),
                               ),
                               const SizedBox(width: 16),
                               Expanded(
@@ -232,7 +136,7 @@ class _CartPageState extends State<CartPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      item.name,
+                                      item.product.productName,
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,
@@ -240,7 +144,7 @@ class _CartPageState extends State<CartPage> {
                                       ),
                                     ),
                                     Text(
-                                      item.description,
+                                      item.product.productName,
                                       style: const TextStyle(
                                         color: Colors.black54,
                                         fontSize: 12,
@@ -252,7 +156,7 @@ class _CartPageState extends State<CartPage> {
                                         quantitySelector(index),
                                         const Spacer(),
                                         Text(
-                                          '${(item.price * item.quantity).toStringAsFixed(2)} zł',
+                                          '${(item.product.price * item.ammount).toStringAsFixed(2)} zł',
                                           style: const TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold,
@@ -290,21 +194,20 @@ class _CartPageState extends State<CartPage> {
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),
-                          onPressed:
-                              cartItems.isEmpty
-                                  ? null
-                                  : () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Zamówienie złożone!'),
-                                      ),
-                                    );
-                                    setState(() {
-                                      cartItems.clear();
-                                    });
-                                  },
+                          onPressed: () {
+                            if (cartService.getAllItemsAmmount() > 0) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Zamówienie złożone!'),
+                                ),
+                              );
+                              setState(() {
+                                cartService.clearCart();
+                              });
+                            }
+                          },
                           child: Text(
-                            'Zamów za ${totalPrice.toStringAsFixed(2)} zł',
+                            'Zamów za ${cartService.getTotalPrice().toStringAsFixed(2)} zł',
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -320,4 +223,3 @@ class _CartPageState extends State<CartPage> {
     );
   }
 }
-
