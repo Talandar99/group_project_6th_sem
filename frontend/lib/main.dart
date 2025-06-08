@@ -9,7 +9,7 @@ import 'package:frontend/web_api/dto/email_password.dart';
 import 'package:frontend/web_api/http_override.dart';
 import 'package:get_it/get_it.dart';
 
-void main() {
+oid main() {
   HttpOverrides.global = MyHttpOverrides();
   runApp(MyApp());
 }
@@ -27,9 +27,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Poppins'),
       home: HomePage(),
-      routes: {
-        '/cart': (context) => CartPage(),
-      },
+      routes: {'/cart': (context) => CartPage()},
     );
   }
 }
