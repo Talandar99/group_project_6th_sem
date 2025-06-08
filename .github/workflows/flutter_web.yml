@@ -22,6 +22,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Get version from pubspec.yaml
+        id: get_version
+        run: |
+          VERSION=$(grep '^version:' frontend/pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          cd "${{ steps.detect_dir.outputs.REPO_DIR }}"
+          TAG="v${{ steps.get_version.outputs.VERSION }}"
+          if git ls-remote --tags origin | grep -q "refs/tags/$TAG"; then
+            echo "EXISTS=true" >> $GITHUB_OUTPUT
+          else
+            echo "EXISTS=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Install Git
         run: |
           apt-get update
@@ -60,22 +77,6 @@ jobs:
           cd build/linux/x64/release
           zip -r ../../../../../flutter_linux_build.zip bundle
 
-      - name: Get version from pubspec.yaml
-        id: get_version
-        run: |
-          VERSION=$(grep '^version:' frontend/pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Check if tag exists
-        id: check_tag
-        run: |
-          cd "${{ steps.detect_dir.outputs.REPO_DIR }}"
-          TAG="v${{ steps.get_version.outputs.VERSION }}"
-          if git ls-remote --tags origin | grep -q "refs/tags/$TAG"; then
-            echo "EXISTS=true" >> $GITHUB_OUTPUT
-          else
-            echo "EXISTS=false" >> $GITHUB_OUTPUT
-          fi
 
       - name: Set up Git for tagging
         if: steps.check_tag.outputs.EXISTS == 'false'
