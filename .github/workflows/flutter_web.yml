@@ -63,6 +63,7 @@ jobs:
           exit 0
 
       - name: Build Flutter Web
+        if: steps.check_tag.outputs.EXISTS == 'false'
         run: |
           cd frontend
           flutter pub get
@@ -71,12 +72,14 @@ jobs:
           zip -r ../../../flutter_web_build.zip .
 
       - name: Build Flutter Apk
+        if: steps.check_tag.outputs.EXISTS == 'false'
         run: |
           cd frontend
           flutter pub get
           flutter build apk
 
       - name: Build Flutter Linux
+        if: steps.check_tag.outputs.EXISTS == 'false'
         run: |
           cd frontend
           flutter config --enable-linux-desktop
