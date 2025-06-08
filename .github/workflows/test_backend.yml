@@ -16,18 +16,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Docker Compose environment
+      - name: Setup and populate database
         run: |
           cd database
           docker compose up -d
-
-      - name: Populate database
-        run: sudo ./scripts/pgsql_execute_database_querry.sh
-        shell: bash
-
-      - name: Tear down Docker Compose environment
-        run: |
-          cd database
+          CONTAINER_ID=$(docker compose ps -q postgres)
+          docker cp query.sql $CONTAINER_ID:/tmp/query.sql
+          docker exec -i $CONTAINER_ID psql -U user -d db -f /tmp/query.sql
           docker compose down
 
       - name: Run backend setup
