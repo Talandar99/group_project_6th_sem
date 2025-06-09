@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import '../theme/app_colors.dart';
 import '../widgets/custom_app_bar.dart';
 import 'package:frontend/pages/payments.dart';
+import 'package:frontend/widgets/custom_snackbar.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -84,9 +85,7 @@ class _CartPageState extends State<CartPage> {
       ),
     );
     if (result == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Płatność zakończona sukcesem!')),
-      );
+      showCustomSnackBar(context, 'Płatność zakończona sukcesem!');
       setState(() {
         cartService.clearCart();
       });
