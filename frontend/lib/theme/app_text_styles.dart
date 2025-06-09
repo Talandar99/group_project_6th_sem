@@ -50,5 +50,22 @@ class AppTextStyles {
     color: AppColors.primary,
     letterSpacing: 1.2,
   );
+
+  static const TextStyle paymentAmount = TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+    color: AppColors.primary,
+  );
+
+  static const TextStyle paymentButton = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+    fontSize: 18,
+  );
+
+  static const TextStyle paymentCancel = TextStyle(
+    color: Colors.black54,
+    fontSize: 16,
+  );
 }
 

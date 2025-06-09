@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_text_styles.dart';
 
 class PaymentsPage extends StatelessWidget {
   final double amount;
@@ -31,11 +32,7 @@ class PaymentsPage extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 '${amount.toStringAsFixed(2)} zł',
-                style: const TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
+                style: AppTextStyles.paymentAmount,
               ),
               const SizedBox(height: 32),
               ElevatedButton.icon(
@@ -49,11 +46,7 @@ class PaymentsPage extends StatelessWidget {
                 icon: const Icon(Icons.check_circle, color: Colors.white),
                 label: const Text(
                   'Zapłać',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
+                  style: AppTextStyles.paymentButton,
                 ),
                 onPressed: () async {
                   await Future.delayed(const Duration(seconds: 2));
@@ -63,7 +56,7 @@ class PaymentsPage extends StatelessWidget {
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: const Text('Anuluj', style: TextStyle(color: Colors.black54)),
+                child: const Text('Anuluj', style: AppTextStyles.paymentCancel),
               ),
             ],
           ),
