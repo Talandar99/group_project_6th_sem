@@ -27,7 +27,7 @@ class PaymentsPage extends StatelessWidget {
               const SizedBox(height: 24),
               Text(
                 'Do zapłaty:',
-                style: TextStyle(fontSize: 20, color: Colors.black54),
+                style: AppTextStyles.paymentLabel,
               ),
               const SizedBox(height: 8),
               Text(

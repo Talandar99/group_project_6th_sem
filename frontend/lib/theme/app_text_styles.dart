@@ -67,5 +67,10 @@ class AppTextStyles {
     color: Colors.black54,
     fontSize: 16,
   );
+
+  static const TextStyle paymentLabel = TextStyle(
+    fontSize: 20,
+    color: Colors.black54,
+  );
 }
 
