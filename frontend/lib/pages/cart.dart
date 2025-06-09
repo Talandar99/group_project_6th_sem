@@ -98,7 +98,11 @@ class _CartPageState extends State<CartPage> {
     List<CartItem> cartItems = cartService.getAllItemsFromCart();
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: CustomAppBar(title: 'Koszyk', showActions: false),
+      appBar: CustomAppBar(
+        title: 'Koszyk',
+        showActions: false,
+        showAboutUs: false,
+      ),
       body:
           cartItems.isEmpty
               ? const Center(
