@@ -9,6 +9,7 @@ import '../widgets/profile_action_button.dart';
 import '../widgets/profile_card.dart';
 import 'home.dart';
 import '../widgets/custom_app_bar.dart';
+import 'package:frontend/pages/purchase_history.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -23,7 +24,11 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: CustomAppBar(title: 'Mój profil', showActions: false),
+      appBar: CustomAppBar(
+        title: 'Mój profil',
+        showActions: false,
+        showAboutUs: false,
+      ),
       body: LayoutBuilder(
         builder: (context, constraints) {
           final isWideScreen = constraints.maxWidth > 600;
@@ -89,6 +94,18 @@ class _ProfilePageState extends State<ProfilePage> {
                         outlined: true,
                       ),
                       ProfileActionButton(
+                        text: 'Historia zakupów',
+                        icon: Icons.history,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PurchaseHistoryPage(),
+                            ),
+                          );
+                        },
+                      ),
+                      ProfileActionButton(
                         text: 'Wyloguj się',
                         icon: Icons.logout,
                         onPressed: () {
@@ -104,6 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             MaterialPageRoute(builder: (context) => HomePage()),
                           );
                         },
+                        color: Colors.red,
                       ),
                     ],
                   ),
