@@ -34,6 +34,9 @@ class UserConnection {
       var decodedBody = json.decode(response.body);
       var token = TokenDto.fromJson(decodedBody);
       persistentStorage.saveData(StorageKeys.apiToken, token.token.toString());
+      if (decodedBody['user_id'] != null) {
+        persistentStorage.saveData(StorageKeys.userId, decodedBody['user_id'].toString());
+      }
       var message = MessageDto.fromJson(decodedBody);
       return message.message;
     } else {
