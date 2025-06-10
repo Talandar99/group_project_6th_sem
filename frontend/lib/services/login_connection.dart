@@ -51,7 +51,7 @@ class UserConnection {
     if (emailPasswordDto.email.isNotEmpty) {
       persistentStorage.saveData(StorageKeys.userEmail, emailPasswordDto.email);
     }
-    var response = await apiService.put(
+    var response = await apiService.post(
       '$apiHost/users/edit',
       emailPasswordDto,
     );

@@ -78,7 +78,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     password: "",
                                   ),
                                 );
-                                //showCustomSnackBar(context, message);
+                                showCustomSnackBar(
+                                  context,
+                                  message,
+                                  duration: Duration(seconds: 2),
+                                );
 
                                 Navigator.pop(context);
                               }

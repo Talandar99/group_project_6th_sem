@@ -86,7 +86,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                   password: _newPasswordController.text,
                                 ),
                               );
-                              //showCustomSnackBar(context, message);
+                              showCustomSnackBar(
+                                context,
+                                message,
+                                duration: Duration(seconds: 2),
+                              );
                               Navigator.pop(context);
                             } else {
                               showCustomSnackBar(
