@@ -35,7 +35,10 @@ class UserConnection {
       var token = TokenDto.fromJson(decodedBody);
       persistentStorage.saveData(StorageKeys.apiToken, token.token.toString());
       if (decodedBody['user_id'] != null) {
-        persistentStorage.saveData(StorageKeys.userId, decodedBody['user_id'].toString());
+        persistentStorage.saveData(
+          StorageKeys.userId,
+          decodedBody['user_id'].toString(),
+        );
       }
       var message = MessageDto.fromJson(decodedBody);
       return message.message;
@@ -48,7 +51,7 @@ class UserConnection {
     if (emailPasswordDto.email.isNotEmpty) {
       persistentStorage.saveData(StorageKeys.userEmail, emailPasswordDto.email);
     }
-    var response = await apiService.post(
+    var response = await apiService.put(
       '$apiHost/users/edit',
       emailPasswordDto,
     );

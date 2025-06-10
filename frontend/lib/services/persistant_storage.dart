@@ -41,9 +41,13 @@ class PersistentStorage {
       await prefs.setString(storageKey.key, value);
     }
   }
-  removeData(StorageKey storageKey) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove(storageKey.key);
-  }
 
+  Future<void> removeData(StorageKey storageKey) async {
+    if (kIsWeb) {
+      return cookiesStorage.saveData(storageKey, "");
+    } else {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString(storageKey.key, "");
+    }
+  }
 }

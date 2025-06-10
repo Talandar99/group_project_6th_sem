@@ -13,9 +13,7 @@ import '../widgets/custom_button.dart';
 import '../widgets/create_account_button.dart';
 import '../widgets/custom_app_bar.dart';
 
-
-
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   Login({super.key});
 
   @override
@@ -38,7 +36,9 @@ class _LoginState extends State<Login> {
 
   Future<void> _loadRememberedData() async {
     final savedEmail = await persistentStorage.getData(StorageKeys.userEmail);
-    final savedPassword = await persistentStorage.getData(StorageKeys.userPassword);
+    final savedPassword = await persistentStorage.getData(
+      StorageKeys.userPassword,
+    );
 
     if (savedEmail != null && savedPassword != null) {
       setState(() {
@@ -65,10 +65,10 @@ class _LoginState extends State<Login> {
       var message = await loginConnectionService.login(
         EmailPasswordDto(email: email, password: password),
       );
-      displaySnackbar(context, message);
+      showCustomSnackBar(context, message);
       Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
     } catch (e) {
-      displaySnackbar(context, "Logowanie Nie Powiodło się");
+      showCustomSnackBar(context, "Logowanie Nie Powiodło się");
     }
   }
 
@@ -77,7 +77,6 @@ class _LoginState extends State<Login> {
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Logowanie',
-        onBackTap: () => Navigator.pop(context),
         showActions: false,
         showAboutUs: false,
       ),
@@ -98,7 +97,8 @@ class _LoginState extends State<Login> {
                     children: [
                       const LogoSection(
                         title: 'Witaj ponownie!',
-                        subtitle: 'Zaloguj się na swoje konto, aby móc w pełni korzystać z aplikacji.',
+                        subtitle:
+                            'Zaloguj się na swoje konto, aby móc w pełni korzystać z aplikacji.',
                       ),
                       Form(
                         child: Padding(
@@ -119,11 +119,7 @@ class _LoginState extends State<Login> {
                                   controller: passwordController,
                                   textLabel: "Hasło",
                                   icon: Icons.lock,
-
                                   isPassword: true,
-
-                                  isPassword:
-                                      true, // dodaje zeby sie tam to oczko pokazalo
                                 ),
                               ),
                               Padding(
@@ -142,30 +138,6 @@ class _LoginState extends State<Login> {
                                 child: CustomButton(
                                   text: 'Zaloguj się',
                                   onPressed: () => _handleLogin(context),
-                                  onPressed: () async {
-                                    try {
-                                      var message = await loginConnectionService
-                                          .login(
-                                            EmailPasswordDto(
-                                              email: emailController.text,
-                                              password: passwordController.text,
-                                            ),
-                                          );
-                                      showCustomSnackBar(context, message);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => HomePage(),
-                                        ),
-                                      );
-                                    } catch (e) {
-                                      showCustomSnackBar(
-                                        context,
-                                        "Logowanie Nie Powiodło się",
-                                      );
-                                    }
-                                    // Login here and navigate to the home page
-                                  },
                                 ),
                               ),
                               Padding(

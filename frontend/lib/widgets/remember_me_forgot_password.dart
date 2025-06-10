@@ -14,7 +14,8 @@ class RememberMeForgotPassword extends StatefulWidget {
   });
 
   @override
-  State<RememberMeForgotPassword> createState() => _RememberMeForgotPasswordState();
+  State<RememberMeForgotPassword> createState() =>
+      _RememberMeForgotPasswordState();
 }
 
 class _RememberMeForgotPasswordState extends State<RememberMeForgotPassword> {
