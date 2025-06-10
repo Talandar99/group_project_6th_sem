@@ -37,8 +37,8 @@ class ProfileActionButton extends StatelessWidget {
                   onPressed: onPressed,
                   icon: Icon(icon, color: Colors.white),
                   label: Text(text),
-                ),
       ),
+      )
     );
   }
 }

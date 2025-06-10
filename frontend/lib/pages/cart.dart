@@ -3,6 +3,8 @@ import 'package:frontend/services/cart_service.dart';
 import 'package:get_it/get_it.dart';
 import '../theme/app_colors.dart';
 import '../widgets/custom_app_bar.dart';
+import 'package:frontend/pages/payments.dart';
+import 'package:frontend/widgets/custom_snackbar.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -74,12 +76,32 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
+  void _fakePayment() async {
+    final total = cartService.getTotalPrice();
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentsPage(amount: total),
+      ),
+    );
+    if (result == true) {
+      showCustomSnackBar(context, 'Płatność zakończona sukcesem!');
+      setState(() {
+        cartService.clearCart();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     List<CartItem> cartItems = cartService.getAllItemsFromCart();
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: CustomAppBar(title: 'Koszyk', showActions: false),
+      appBar: CustomAppBar(
+        title: 'Koszyk',
+        showActions: false,
+        showAboutUs: false,
+      ),
       body:
           cartItems.isEmpty
               ? const Center(
@@ -190,14 +212,7 @@ class _CartPageState extends State<CartPage> {
                           ),
                           onPressed: () {
                             if (cartService.getAllItemsAmmount() > 0) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Zamówienie złożone!'),
-                                ),
-                              );
-                              setState(() {
-                                cartService.clearCart();
-                              });
+                              _fakePayment();
                             }
                           },
                           child: Text(
