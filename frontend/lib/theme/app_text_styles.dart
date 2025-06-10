@@ -20,6 +20,12 @@ class AppTextStyles {
     color: AppColors.iconColor,
   );
 
+  static const TextStyle bodySmall = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.normal,
+    color: Colors.black54,
+  );
+
   static const TextStyle link = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.bold,
@@ -30,6 +36,12 @@ class AppTextStyles {
     fontSize: 16,
     fontWeight: FontWeight.bold,
     color: AppColors.white,
+  );
+
+  static const TextStyle price = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: AppColors.primary,
   );
 
   static const TextStyle appBarTitle = TextStyle(

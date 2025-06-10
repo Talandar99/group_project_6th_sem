@@ -66,14 +66,11 @@ class PurchaseHistoryPage extends StatelessWidget {
                                 children: [
                                   Text(
                                     item.productName,
-                                    style: AppTextStyles.heading.copyWith(fontSize: 16),
+                                    style: AppTextStyles.subheading.copyWith(fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     item.description,
-                                    style: AppTextStyles.body.copyWith(
-                                      fontSize: 12,
-                                      color: Colors.black54,
-                                    ),
+                                    style: AppTextStyles.bodySmall,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -82,10 +79,7 @@ class PurchaseHistoryPage extends StatelessWidget {
                             ),
                             Text(
                               '${item.price.toStringAsFixed(2)} zł',
-                              style: AppTextStyles.button.copyWith(
-                                fontSize: 16,
-                                color: AppColors.primary,
-                              ),
+                              style: AppTextStyles.price,
                             ),
                           ],
                         ),
@@ -95,17 +89,11 @@ class PurchaseHistoryPage extends StatelessWidget {
                           children: [
                             Text(
                               item.createdAt,
-                              style: AppTextStyles.body.copyWith(
-                                fontSize: 12,
-                                color: Colors.black54,
-                              ),
+                              style: AppTextStyles.bodySmall,
                             ),
                             Text(
                               'Ilość: ${item.amountInStock}',
-                              style: AppTextStyles.body.copyWith(
-                                fontSize: 12,
-                                color: Colors.black54,
-                              ),
+                              style: AppTextStyles.bodySmall,
                             ),
                           ],
                         ),
