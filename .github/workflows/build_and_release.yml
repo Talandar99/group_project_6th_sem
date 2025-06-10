@@ -89,13 +89,14 @@ jobs:
           cd build/linux/x64/release
           zip -r ../../../../../flutter_linux_build.zip bundle
 
-      - name: Create and push Git tag
-        if: steps.check_tag.outputs.EXISTS == 'false'
-        run: |
-          cd "${{ steps.detect_dir.outputs.REPO_DIR }}"
-          TAG="v${{ steps.get_version.outputs.VERSION }}"
-          git tag "$TAG"
-          git push origin "$TAG"
+      - name: Move APK to root
+        run: cp frontend/build/app/outputs/flutter-apk/app-release.apk app-release.apk
+
+      - name: Fix permissions
+        run: chmod 644 flutter_web_build.zip flutter_linux_build.zip app-release.apk
+
+      - name: List files for release
+        run: ls -lh flutter_web_build.zip flutter_linux_build.zip app-release.apk
 
       - name: Create GitHub Release
         if: steps.check_tag.outputs.EXISTS == 'false'
@@ -108,4 +109,4 @@ jobs:
           files: |
             flutter_web_build.zip
             flutter_linux_build.zip
-            frontend/build/app/outputs/flutter-apk/app-release.apk
+            app-release.apk
