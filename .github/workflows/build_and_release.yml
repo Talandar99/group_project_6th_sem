@@ -40,7 +40,7 @@ jobs:
 
       - name: Update API host in host_ip.dart
         run: |
-          sed -i 's|https://localhost:8080|https://projekt.dawtyl.ovh:8080|' frontend/lib/web_api/host_ip.dart
+          sed -i 's|https://localhost:8080|https://projekt.dawtyl.ovh:8443|' frontend/lib/web_api/host_ip.dart
 
       - name: Show updated host_ip.dart
         run: cat frontend/lib/web_api/host_ip.dart
@@ -80,6 +80,7 @@ jobs:
           cd frontend
           flutter pub get
           flutter build apk
+          ls  build/app/outputs/flutter-apk/
 
       - name: Build Flutter Linux
         run: |

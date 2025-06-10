@@ -24,25 +24,23 @@ class ProfileActionButton extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         height: 50,
-        child: outlined
-            ? OutlinedButton.icon(
-                onPressed: onPressed,
-                icon: Icon(icon, color: color ?? AppColors.primary),
-                label: Text(text, style: TextStyle(color: color ?? AppColors.primary)),
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: color ?? AppColors.primary),
-                ),
-              )
-            : ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: color ?? AppColors.primary,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: onPressed,
-                icon: Icon(icon, color: Colors.white),
-                label: Text(text),
-              ),
+        child:
+            outlined
+                ? OutlinedButton.icon(
+                  onPressed: onPressed,
+                  icon: Icon(icon, color: AppColors.primary),
+                  label: Text(text),
+                )
+                : ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: onPressed,
+                  icon: Icon(icon, color: Colors.white),
+                  label: Text(text),
       ),
+      )
     );
   }
 }
