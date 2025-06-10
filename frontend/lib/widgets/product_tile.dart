@@ -44,6 +44,7 @@ class ProductTile extends StatelessWidget {
                   height: 300,
                   width: 300,
                   fit: BoxFit.cover,
+                  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
                 ),
               ),
             ),

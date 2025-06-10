@@ -12,7 +12,7 @@ class ProductsConnection {
 
   Future<List<Product>> getAllProducts(String searchQuerry) async {
     var response = await apiService.makeApiGetRequest(
-      '$apiHost/products/?page=1&limit=10&s=$searchQuerry',
+      '$apiHost/products/?page=1&limit=100&s=$searchQuerry',
     );
     var decodedBody = json.decode(response.body);
 

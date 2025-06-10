@@ -80,9 +80,7 @@ class _CartPageState extends State<CartPage> {
     final total = cartService.getTotalPrice();
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => PaymentsPage(amount: total),
-      ),
+      MaterialPageRoute(builder: (context) => PaymentsPage(amount: total)),
     );
     if (result == true) {
       showCustomSnackBar(context, 'Płatność zakończona sukcesem!');
@@ -144,7 +142,11 @@ class _CartPageState extends State<CartPage> {
                                   color: Colors.grey[200],
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: Image.network(item.product.imageUrl),
+                                child: Image.network(
+                                  item.product.imageUrl,
+                                  webHtmlElementStrategy:
+                                      WebHtmlElementStrategy.prefer,
+                                ),
                               ),
                               const SizedBox(width: 16),
                               Expanded(
