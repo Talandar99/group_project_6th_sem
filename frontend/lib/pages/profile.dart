@@ -24,7 +24,11 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: CustomAppBar(title: 'Mój profil', showActions: false),
+      appBar: CustomAppBar(
+        title: 'Mój profil',
+        showActions: false,
+        showAboutUs: false,
+      ),
       body: LayoutBuilder(
         builder: (context, constraints) {
           final isWideScreen = constraints.maxWidth > 600;
