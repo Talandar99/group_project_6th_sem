@@ -184,7 +184,7 @@ class UsersController extends AppController
     }
 
     /**
-     * @OA\Put(
+     * @OA\Post(
      *     path="/users/edit",
      *     summary="Edycja danych użytkownika",
      *     description="Endpoint umożliwia edycję danych zalogowanego użytkownika.",
@@ -221,7 +221,7 @@ class UsersController extends AppController
      * )
      */
     public function edit() {
-        $this->request->allowMethod(['put', 'patch']); // Akceptujemy PUT i PATCH
+        $this->request->allowMethod(['put', 'patch', 'post']);
 
         // Uzyskaj aktualnie zalogowanego użytkownika
         $identity = $this->Authentication->getIdentity();
