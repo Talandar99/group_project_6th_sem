@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-test:
-    runs-on: ubuntu-latest
+    runs-on: debian-latest
     container:
       image: instrumentisto/flutter:latest
 

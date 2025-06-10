@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: debian-latest
     container:
       image: instrumentisto/flutter:latest
 
@@ -136,7 +136,7 @@ jobs:
 
 
   release:
-    runs-on: ubuntu-latest
+    runs-on: debian-latest
     needs: [build, build_windows]
 
     steps:
