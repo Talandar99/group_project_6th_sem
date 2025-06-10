@@ -80,7 +80,6 @@ jobs:
           cd frontend
           flutter pub get
           flutter build apk
-          cp frontend/build/app/outputs/flutter-apk/app-release.apk app-release.apk
 
       - name: Build Flutter Linux
         run: |
