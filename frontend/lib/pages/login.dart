@@ -13,19 +13,72 @@ import '../widgets/custom_button.dart';
 import '../widgets/create_account_button.dart';
 import '../widgets/custom_app_bar.dart';
 
+
+
 class Login extends StatelessWidget {
   Login({super.key});
 
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
   final UserConnection loginConnectionService = GetIt.I<UserConnection>();
   final PersistentStorage persistentStorage = GetIt.I<PersistentStorage>();
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool rememberMe = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRememberedData();
+  }
+
+  Future<void> _loadRememberedData() async {
+    final savedEmail = await persistentStorage.getData(StorageKeys.userEmail);
+    final savedPassword = await persistentStorage.getData(StorageKeys.userPassword);
+
+    if (savedEmail != null && savedPassword != null) {
+      setState(() {
+        emailController.text = savedEmail;
+        passwordController.text = savedPassword;
+        rememberMe = true;
+      });
+    }
+  }
+
+  Future<void> _handleLogin(BuildContext context) async {
+    try {
+      final email = emailController.text;
+      final password = passwordController.text;
+
+      if (rememberMe) {
+        await persistentStorage.saveData(StorageKeys.userEmail, email);
+        await persistentStorage.saveData(StorageKeys.userPassword, password);
+      } else {
+        await persistentStorage.removeData(StorageKeys.userEmail);
+        await persistentStorage.removeData(StorageKeys.userPassword);
+      }
+
+      var message = await loginConnectionService.login(
+        EmailPasswordDto(email: email, password: password),
+      );
+      displaySnackbar(context, message);
+      Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+    } catch (e) {
+      displaySnackbar(context, "Logowanie Nie Powiodło się");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Logowanie',
+        onBackTap: () => Navigator.pop(context),
+        showActions: false,
         showAboutUs: false,
       ),
       backgroundColor: AppColors.white,
@@ -45,8 +98,7 @@ class Login extends StatelessWidget {
                     children: [
                       const LogoSection(
                         title: 'Witaj ponownie!',
-                        subtitle:
-                            'Zaloguj się na swoje konto, aby móc w pełni korzystać z aplikacji.',
+                        subtitle: 'Zaloguj się na swoje konto, aby móc w pełni korzystać z aplikacji.',
                       ),
                       Form(
                         child: Padding(
@@ -67,18 +119,29 @@ class Login extends StatelessWidget {
                                   controller: passwordController,
                                   textLabel: "Hasło",
                                   icon: Icons.lock,
+
+                                  isPassword: true,
+
                                   isPassword:
                                       true, // dodaje zeby sie tam to oczko pokazalo
                                 ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 16),
-                                child: RememberMeForgotPassword(),
+                                child: RememberMeForgotPassword(
+                                  rememberMe: rememberMe,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      rememberMe = value ?? false;
+                                    });
+                                  },
+                                ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 16),
                                 child: CustomButton(
                                   text: 'Zaloguj się',
+                                  onPressed: () => _handleLogin(context),
                                   onPressed: () async {
                                     try {
                                       var message = await loginConnectionService

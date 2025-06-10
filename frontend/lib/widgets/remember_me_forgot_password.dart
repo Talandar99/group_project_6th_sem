@@ -3,27 +3,36 @@ import 'package:frontend/widgets/custom_snackbar.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
-class RememberMeForgotPassword extends StatelessWidget {
-  const RememberMeForgotPassword({super.key});
+class RememberMeForgotPassword extends StatefulWidget {
+  final bool rememberMe;
+  final ValueChanged<bool?> onChanged;
 
+  const RememberMeForgotPassword({
+    super.key,
+    required this.rememberMe,
+    required this.onChanged,
+  });
+
+  @override
+  State<RememberMeForgotPassword> createState() => _RememberMeForgotPasswordState();
+}
+
+class _RememberMeForgotPasswordState extends State<RememberMeForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        //Remember me
         Row(
           children: [
             Checkbox(
-              value: false,
-              onChanged: (value) {},
+              value: widget.rememberMe,
+              onChanged: widget.onChanged,
               activeColor: AppColors.primary,
             ),
             Text('Zapamiętaj mnie', style: AppTextStyles.body),
           ],
         ),
-
-        //Forgot password
         TextButton(
           onPressed: () {
             showCustomSnackBar(

@@ -41,4 +41,9 @@ class PersistentStorage {
       await prefs.setString(storageKey.key, value);
     }
   }
+  removeData(StorageKey storageKey) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(storageKey.key);
+  }
+
 }
