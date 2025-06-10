@@ -34,7 +34,7 @@ class AboutUsPage extends StatelessWidget {
     );
   }
 
-  Widget _sectionCard(String title, String content, {Widget? leadingImage}) {
+  Widget _sectionCard(String title, String content, {Widget? leadingImage, Widget? child}) {
     return Card(
       color: Colors.white.withOpacity(0.95),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -55,7 +55,7 @@ class AboutUsPage extends StatelessWidget {
                 children: [
                   _sectionTitle(title),
                   const SizedBox(height: 12),
-                  _sectionText(content),
+                  child ?? _sectionText(content),
                 ],
               ),
             ),
@@ -121,37 +121,33 @@ class AboutUsPage extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                 ),
-                Card(
-                  color: Colors.white.withOpacity(0.95),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                _sectionCard(
+                  'Kontakt',
+                  '',
+                  leadingImage: Icon(
+                    Icons.contacts,
+                    size: 48,
+                    color: AppColors.primary,
                   ),
-                  elevation: 8,
-                  margin: const EdgeInsets.symmetric(vertical: 14),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _sectionTitle('Kontakt'),
-                        const SizedBox(height: 12),
-                        ListTile(
-                          leading: Icon(Icons.email, color: AppColors.primary),
-                          title: const Text('kontakt@woodspace.pl'),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.phone, color: AppColors.primary),
-                          title: const Text('+48 600 123 456'),
-                        ),
-                        ListTile(
-                          leading: Icon(
-                            Icons.location_on,
-                            color: AppColors.primary,
-                          ),
-                          title: const Text('ul. Stolarzy 10, 30-001 Kraków'),
-                        ),
-                      ],
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: Icon(Icons.email, color: AppColors.primary),
+                        title: const Text('kontakt@woodspace.pl'),
+                      ),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: Icon(Icons.phone, color: AppColors.primary),
+                        title: const Text('+48 600 123 456'),
+                      ),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: Icon(Icons.location_on, color: AppColors.primary),
+                        title: const Text('ul. Stolarzy 10, 30-001 Kraków'),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 40),
