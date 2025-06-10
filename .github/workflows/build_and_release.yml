@@ -129,13 +129,13 @@ jobs:
           git push origin "$TAG"
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: v${{ steps.version.outputs.VERSION }}
-          name: Flutter Web, APK and Linux builds v${{ steps.version.outputs.VERSION }}
+          tag: "v${{ steps.version.outputs.VERSION }}"
+          name: "Flutter Web, APK and Linux builds v${{ steps.version.outputs.VERSION }}"
           body: |
             Automated build for version v${{ steps.version.outputs.VERSION }}
-          files: |
+          artifacts: |
             flutter_web_build.zip
             flutter_linux_build.zip
             frontend/build/app/outputs/flutter-apk/app-release.apk
