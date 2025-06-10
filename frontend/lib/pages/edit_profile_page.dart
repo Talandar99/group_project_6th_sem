@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/services/login_connection.dart';
+import 'package:frontend/web_api/dto/email_password.dart';
+import 'package:frontend/widgets/custom_snackbar.dart';
+import 'package:get_it/get_it.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
-import '../widgets/custom_button.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
@@ -11,9 +14,9 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  final UserConnection userConnection = GetIt.I<UserConnection>();
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController(text: 'name');
-  final _emailController = TextEditingController(text: 'email@xoxo.xoxo');
+  final _emailController = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
@@ -40,25 +43,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
                         _buildStaticHeader(),
                         const SizedBox(height: 32),
-
-                        // Imię
-                        TextFormField(
-                          controller: _nameController,
-                          decoration: InputDecoration(
-                            labelText: 'Imię',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Podaj swoje imię';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-
                         // Email
                         TextFormField(
                           controller: _emailController,
@@ -86,8 +70,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               backgroundColor: AppColors.primary,
                               foregroundColor: Colors.white,
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
+                                var message = await userConnection.editUser(
+                                  EmailPasswordDto(
+                                    email: _emailController.text,
+                                    password: "",
+                                  ),
+                                );
+                                //showCustomSnackBar(context, message);
+
                                 Navigator.pop(context);
                               }
                             },

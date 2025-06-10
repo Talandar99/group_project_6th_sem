@@ -22,12 +22,7 @@ class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Rejestracja',
-        onBackTap: () {
-          Navigator.pop(context);
-        },
-      ),
+      appBar: CustomAppBar(title: 'Rejestracja'),
       backgroundColor: AppColors.white,
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -83,7 +78,7 @@ class Register extends StatelessWidget {
                                               password: passwordController.text,
                                             ),
                                           );
-                                      displaySnackbar(context, message);
+                                      showCustomSnackBar(context, message);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -91,7 +86,7 @@ class Register extends StatelessWidget {
                                         ),
                                       );
                                     } catch (e) {
-                                      displaySnackbar(
+                                      showCustomSnackBar(
                                         context,
                                         "Rejestracja nie powiodła się",
                                       );

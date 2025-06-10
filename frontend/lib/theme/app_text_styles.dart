@@ -20,6 +20,12 @@ class AppTextStyles {
     color: AppColors.iconColor,
   );
 
+  static const TextStyle bodySmall = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.normal,
+    color: Colors.black54,
+  );
+
   static const TextStyle link = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.bold,
@@ -32,6 +38,12 @@ class AppTextStyles {
     color: AppColors.white,
   );
 
+  static const TextStyle price = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: AppColors.primary,
+  );
+
   static const TextStyle appBarTitle = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.bold,
@@ -42,4 +54,35 @@ class AppTextStyles {
     fontSize: 14,
     color: Color(0xffDDDADA),
   );
+
+  static const TextStyle logoText = TextStyle(
+    fontFamily: 'Poppins',
+    fontWeight: FontWeight.w800,
+    fontSize: 28,
+    color: AppColors.primary,
+    letterSpacing: 1.2,
+  );
+
+  static const TextStyle paymentAmount = TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+    color: AppColors.primary,
+  );
+
+  static const TextStyle paymentButton = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+    fontSize: 18,
+  );
+
+  static const TextStyle paymentCancel = TextStyle(
+    color: Colors.black54,
+    fontSize: 16,
+  );
+
+  static const TextStyle paymentLabel = TextStyle(
+    fontSize: 20,
+    color: Colors.black54,
+  );
 }
+

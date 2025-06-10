@@ -7,7 +7,7 @@
   <title>SwaggerUI</title>
   <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css" />
   <style>
-    #swagger-ui .swagger-ui .scheme-container,
+    /* #swagger-ui .swagger-ui .scheme-container,
     body {
       background-color:rgb(27, 27, 27);
       color: white !important;
@@ -34,7 +34,7 @@
     }
     .swagger-ui .info {
       margin: 50px 0 25px 0;
-    }
+    } */
   </style>
 </head>
 <body>

@@ -29,7 +29,11 @@ class ProductImageDetails extends StatelessWidget {
             itemBuilder: (context, index) {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.network(imageUrls[index], fit: BoxFit.cover),
+                child: Image.network(
+                  imageUrls[index],
+                  fit: BoxFit.cover,
+                  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+                ),
               );
             },
           ),

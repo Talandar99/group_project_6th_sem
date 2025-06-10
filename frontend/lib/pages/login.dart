@@ -13,43 +13,10 @@ import '../widgets/custom_button.dart';
 import '../widgets/create_account_button.dart';
 import '../widgets/custom_app_bar.dart';
 
-//  Future<void> registerTest() async {
-//    var x = await loginConnectionService.register(
-//      EmailPasswordDto(
-//        email: "user@example.com",
-//        password: "securepassword123",
-//      ),
-//    );
-//    print("=========================================");
-//    print("status code");
-//    print("-----------------------------------------");
-//    print(x);
-//    print("=========================================");
-//    setState(() {
-//      text = "This is register status code:";
-//      token = x.toString();
-//    });
-//  }
-//
-//  Future<void> loginTest() async {
-//    var x = await loginConnectionService.login(
-//      EmailPasswordDto(
-//        email: "user@example.com",
-//        password: "securepassword123",
-//      ),
-//    );
-//    print("=========================================");
-//    print("token");
-//    print("-----------------------------------------");
-//    print(x.token);
-//    print("=========================================");
-//    setState(() {
-//      text = "This is your token:";
-//      token = x.token;
-//    });
-//  }
-class Login extends StatefulWidget {
-  const Login({super.key});
+
+
+class Login extends StatelessWidget {
+  Login({super.key});
 
   @override
   State<Login> createState() => _LoginState();
@@ -112,6 +79,7 @@ class _LoginState extends State<Login> {
         title: 'Logowanie',
         onBackTap: () => Navigator.pop(context),
         showActions: false,
+        showAboutUs: false,
       ),
       backgroundColor: AppColors.white,
       body: LayoutBuilder(
@@ -151,7 +119,11 @@ class _LoginState extends State<Login> {
                                   controller: passwordController,
                                   textLabel: "Hasło",
                                   icon: Icons.lock,
+
                                   isPassword: true,
+
+                                  isPassword:
+                                      true, // dodaje zeby sie tam to oczko pokazalo
                                 ),
                               ),
                               Padding(
@@ -170,6 +142,30 @@ class _LoginState extends State<Login> {
                                 child: CustomButton(
                                   text: 'Zaloguj się',
                                   onPressed: () => _handleLogin(context),
+                                  onPressed: () async {
+                                    try {
+                                      var message = await loginConnectionService
+                                          .login(
+                                            EmailPasswordDto(
+                                              email: emailController.text,
+                                              password: passwordController.text,
+                                            ),
+                                          );
+                                      showCustomSnackBar(context, message);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => HomePage(),
+                                        ),
+                                      );
+                                    } catch (e) {
+                                      showCustomSnackBar(
+                                        context,
+                                        "Logowanie Nie Powiodło się",
+                                      );
+                                    }
+                                    // Login here and navigate to the home page
+                                  },
                                 ),
                               ),
                               Padding(

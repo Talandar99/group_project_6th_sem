@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/services/cart_service.dart';
+import 'package:frontend/web_api/dto/products.dart';
+import 'package:frontend/widgets/custom_alert.dart';
+import 'package:frontend/widgets/custom_snackbar.dart';
 import 'package:frontend/widgets/page_indicator_dots.dart';
-import '../models/product_model.dart';
+import 'package:get_it/get_it.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../widgets/product_action_buttons.dart';
@@ -8,7 +12,7 @@ import '../widgets/product_image_details.dart';
 import '../widgets/custom_app_bar.dart';
 
 class ProductDetailsPage extends StatefulWidget {
-  final ProductModel product;
+  final Product product;
 
   const ProductDetailsPage({super.key, required this.product});
 
@@ -17,6 +21,7 @@ class ProductDetailsPage extends StatefulWidget {
 }
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
+  final CartService cartService = GetIt.I<CartService>();
   int quantity = 1;
   List<String> imageUrls = [];
   late PageController _pageController;
@@ -37,59 +42,30 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   }
 
   void _loadProductImages() {
-    imageUrls = [
-      'https://picsum.photos/id/${widget.product.id * 10 + 1}/600/400',
-      'https://picsum.photos/id/${widget.product.id * 10 + 2}/600/400',
-      'https://picsum.photos/id/${widget.product.id * 10 + 3}/600/400',
-    ];
+    imageUrls = [super.widget.product.imageUrl];
     setState(() {});
   }
 
   void _incrementQuantity() {
-    if (quantity >= widget.product.amount) {
-      _showAlert('Nie ma już więcej sztuk tego produktu.');
+    if (quantity >= widget.product.amountInStock) {
+      showAlert('Nie ma już więcej sztuk tego produktu.', context);
       return;
     }
-    setState(() => quantity++);
+    setState(() {
+      cartService.addItemToCart(widget.product);
+    });
   }
 
   void _decrementQuantity() {
-    if (quantity > 1) {
-      setState(() => quantity--);
-    }
-  }
-
-  void _showAlert(String message) {
-    showDialog(
-      context: context,
-      builder:
-          (_) => AlertDialog(
-            title: Text('Uwaga'),
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('OK'),
-              ),
-            ],
-          ),
-    );
+    setState(() {
+      cartService.removeItemFromCart(widget.product);
+    });
   }
 
   void _addToCart() {
-    // Przekazanie produktu do koszyka przez Navigator
-    Navigator.pushNamed(
-      context,
-      '/cart',
-      arguments: {
-        'id': widget.product.id,
-        'name': widget.product.name,
-        'description': widget.product.description,
-        'price': widget.product.price,
-        'image': 'assets/icons/table.jpg',
-        'quantity': quantity,
-      },
-    );
+    setState(() {
+      cartService.addItemToCart(widget.product);
+    });
     setState(() => showSuccess = true);
     Future.delayed(Duration(seconds: 2), () {
       setState(() => showSuccess = false);
@@ -97,15 +73,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   }
 
   void _buyNow() {
-    print('Kup teraz: ${widget.product.name}, ilość: $quantity');
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('Dziękujemy za zakup!')));
+    print('Kup teraz: ${widget.product.productName}, ilość: $quantity');
+    showCustomSnackBar(context, 'Dziękujemy za zakup!');
   }
 
-  void _goToCart() {
-    Navigator.pushNamed(context, '/cart');
-  }
+  //void _goToCart() {
+  //  Navigator.pushNamed(context, '/cart');
+  //}
 
   void _nextImage() {
     if (_currentPage < imageUrls.length - 1) {
@@ -129,13 +103,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: CustomAppBar(
-        title: 'Szczegóły produktu',
-        showActions: false,
-        onBackTap: () {
-          Navigator.pop(context);
-        },
-      ),
+      appBar: CustomAppBar(title: 'Szczegóły produktu', showActions: false),
       body: Center(
         child: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: 800),
@@ -162,7 +130,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
               Padding(
                 padding: EdgeInsets.only(top: 24),
-                child: Text(widget.product.name, style: AppTextStyles.heading),
+                child: Text(
+                  widget.product.productName,
+                  style: AppTextStyles.heading,
+                ),
               ),
 
               Padding(
@@ -196,28 +167,37 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   Row(
                     children: [
                       InkWell(
-                        onTap: quantity > 1 ? _decrementQuantity : null,
+                        onTap: _decrementQuantity,
                         borderRadius: BorderRadius.circular(100),
                         child: Container(
                           width: 36,
                           height: 36,
                           decoration: BoxDecoration(
-                            color: quantity <= 1 ? Colors.grey[100] : AppColors.white,
+                            color:
+                                quantity <= 1
+                                    ? Colors.grey[100]
+                                    : AppColors.white,
                             borderRadius: BorderRadius.circular(100),
                             border: Border.all(
-                              color: quantity <= 1 ? Colors.grey[200]! : Colors.grey[300]!
+                              color:
+                                  quantity <= 1
+                                      ? Colors.grey[200]!
+                                      : Colors.grey[300]!,
                             ),
                           ),
                           child: Icon(
                             Icons.remove,
-                            color: quantity <= 1 ? Colors.grey[400] : Colors.black,
+                            color:
+                                quantity <= 1 ? Colors.grey[400] : Colors.black,
                           ),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          quantity.toString(),
+                          cartService
+                              .getItemQuantityByProduct(widget.product)
+                              .toString(),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -234,10 +214,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             color: AppColors.primary,
                             borderRadius: BorderRadius.circular(100),
                           ),
-                          child: const Icon(
-                            Icons.add,
-                            color: Colors.white,
-                          ),
+                          child: const Icon(Icons.add, color: Colors.white),
                         ),
                       ),
                     ],
@@ -246,7 +223,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               ),
               Padding(padding: EdgeInsets.only(top: 24)),
               ProductActionButtons(onAddToCart: _addToCart, onBuyNow: _buyNow),
-
               Padding(
                 padding: EdgeInsets.only(top: 20),
                 child: AnimatedOpacity(

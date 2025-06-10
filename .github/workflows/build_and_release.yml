@@ -1,0 +1,141 @@
+name: Build Flutter Web, APK, Linux
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: instrumentisto/flutter:latest
+
+    steps:
+      - name: Configure Git safe directory
+        run: git config --global --add safe.directory /usr/local/flutter
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git safe directory (repo)
+        run: |
+          echo "$GITHUB_WORKSPACE"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Install Git
+        run: |
+          apt-get update
+          apt-get install -y git
+
+      - name: Detect working directory
+        id: detect_dir
+        run: echo "REPO_DIR=$(pwd)" >> $GITHUB_OUTPUT
+
+      - name: Update API host in host_ip.dart
+        run: |
+          sed -i 's|https://localhost:8080|https://projekt.dawtyl.ovh:8443|' frontend/lib/web_api/host_ip.dart
+
+      - name: Show updated host_ip.dart
+        run: cat frontend/lib/web_api/host_ip.dart
+
+      - name: Get version from pubspec.yaml
+        id: get_version
+        run: |
+          VERSION=$(grep '^version:' frontend/pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
+          echo "$VERSION" > version.txt
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          TAG="v${{ steps.get_version.outputs.VERSION }}"
+          if git ls-remote --tags https://github.com/${{ github.repository }} | grep -q "refs/tags/$TAG"; then
+            echo "EXISTS=true" >> $GITHUB_OUTPUT
+          else
+            echo "EXISTS=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Stop if tag exists
+        if: steps.check_tag.outputs.EXISTS == 'true'
+        run: |
+          echo "Tag ${{ steps.get_version.outputs.VERSION }} already exists. Skipping build."
+          exit 0
+
+      - name: Build Flutter Web
+        run: |
+          cd frontend
+          flutter pub get
+          flutter build web
+          cd build/web
+          zip -r ../../../flutter_web_build.zip .
+
+      - name: Build Flutter Apk
+        run: |
+          cd frontend
+          flutter pub get
+          flutter build apk
+          ls  build/app/outputs/flutter-apk/
+
+      - name: Build Flutter Linux
+        run: |
+          cd frontend
+          flutter config --enable-linux-desktop
+          flutter build linux
+          cd build/linux/x64/release
+          zip -r ../../../../../flutter_linux_build.zip bundle
+
+      - name: Upload artifacts (builds + version)
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            flutter_web_build.zip
+            flutter_linux_build.zip
+            frontend/build/app/outputs/flutter-apk/app-release.apk
+            version.txt
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Read version
+        id: version
+        run: |
+          VERSION=$(cat version.txt)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create and push Git tag
+        run: |
+          TAG="v${{ steps.version.outputs.VERSION }}"
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git tag "$TAG"
+          git push origin "$TAG"
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "v${{ steps.version.outputs.VERSION }}"
+          name: "Flutter Web, APK and Linux builds v${{ steps.version.outputs.VERSION }}"
+          body: |
+            Automated build for version v${{ steps.version.outputs.VERSION }}
+          artifacts: |
+            flutter_web_build.zip
+            flutter_linux_build.zip
+            frontend/build/app/outputs/flutter-apk/app-release.apk

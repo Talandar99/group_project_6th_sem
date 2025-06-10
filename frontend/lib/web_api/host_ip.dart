@@ -1,3 +1,4 @@
 String get apiHost {
-  return 'https://localhost:8443';
+  return 'https://projekt.dawtyl.ovh:8443'; //uncomment this line for production backend
+  //return 'https://localhost:8080';
 }

@@ -25,6 +25,7 @@ class UserConnection {
   }
 
   Future<String> login(EmailPasswordDto emailPasswordDto) async {
+    persistentStorage.saveData(StorageKeys.userEmail, emailPasswordDto.email);
     var response = await apiService.postWithoutToken(
       '$apiHost/users/login',
       emailPasswordDto,
@@ -33,10 +34,32 @@ class UserConnection {
       var decodedBody = json.decode(response.body);
       var token = TokenDto.fromJson(decodedBody);
       persistentStorage.saveData(StorageKeys.apiToken, token.token.toString());
+      if (decodedBody['user_id'] != null) {
+        persistentStorage.saveData(StorageKeys.userId, decodedBody['user_id'].toString());
+      }
       var message = MessageDto.fromJson(decodedBody);
       return message.message;
     } else {
       throw Exception(response.statusCode);
+    }
+  }
+
+  Future<String> editUser(EmailPasswordDto emailPasswordDto) async {
+    if (emailPasswordDto.email.isNotEmpty) {
+      persistentStorage.saveData(StorageKeys.userEmail, emailPasswordDto.email);
+    }
+    var response = await apiService.post(
+      '$apiHost/users/edit',
+      emailPasswordDto,
+    );
+
+    if (response.statusCode == 200) {
+      var decodedBody = json.decode(response.body);
+      var message = MessageDto.fromJson(decodedBody);
+      print(message.message);
+      return message.message;
+    } else {
+      throw Exception('ERROR: ${response.statusCode}');
     }
   }
 }

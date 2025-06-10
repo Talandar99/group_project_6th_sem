@@ -1,0 +1,46 @@
+name: Test Flutter Build
+
+on:
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    container:
+      image: instrumentisto/flutter:latest
+
+    steps:
+      - name: Configure Git safe directory
+        run: git config --global --add safe.directory /usr/local/flutter
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Git
+        run: |
+          apt-get update
+          apt-get install -y git
+
+      - name: Configure Git safe directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          flutter pub get
+
+      - name: Test Flutter Web build
+        run: |
+          cd frontend
+          flutter build web
+
+      - name: Test Flutter APK build
+        run: |
+          cd frontend
+          flutter build apk
+
+      - name: Test Flutter Linux build
+        run: |
+          cd frontend
+          flutter config --enable-linux-desktop
+          flutter build linux

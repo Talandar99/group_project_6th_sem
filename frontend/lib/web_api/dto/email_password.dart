@@ -9,10 +9,17 @@ class EmailPasswordDto implements DtoToJsonInterface {
   @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    if (email.isNotEmpty) {
+      data['email'] = email;
+    } else {
+      print("email is empty");
+    }
 
-    data['email'] = email;
-    data['password'] = password;
-
+    if (password.isNotEmpty) {
+      data['password'] = password;
+    } else {
+      print("password is empty");
+    }
     return data;
   }
 }

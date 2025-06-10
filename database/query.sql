@@ -16,6 +16,17 @@ CREATE TABLE products (
     image_url VARCHAR(255)
 );
 
+CREATE TABLE purchase_history (
+    id SERIAL PRIMARY KEY,
+    product_name VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    amount_in_stock INT NOT NULL,
+    description TEXT,
+    image_url VARCHAR(255),
+    user_id INT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 
 INSERT INTO products (product_name, price, amount_in_stock, description, image_url) VALUES
 ('Zestaw stolik + krzesła czarne', 499.99, 10, 'Zestaw 2 krzesła + stolik, drewniane, czarne, w nowoczesnym stylu.', 'images/img-00001.jpg'),
