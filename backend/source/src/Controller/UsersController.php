@@ -236,7 +236,9 @@ class UsersController extends AppController
         }
 
         // Pobierz dane z żądania
-        $data = $this->request->getData();
+        $data = array_filter($this->request->getData(), function ($value) {
+            return $value !== null && $value !== '';
+        }, ARRAY_FILTER_USE_BOTH);
 
         // Załaduj dane do aktualnie zalogowanego użytkownika
         $userId = $identity->getIdentifier();
