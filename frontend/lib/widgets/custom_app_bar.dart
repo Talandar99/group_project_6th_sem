@@ -136,6 +136,7 @@ Future<List<Widget>> getActions(
     if (apiToken.length > 1) {
       return [
         GestureDetector(
+			
           onTap: () {
             Navigator.push(
               context,
@@ -175,6 +176,7 @@ Future<List<Widget>> getActions(
     } else {
       return [
         GestureDetector(
+		  key: const ValueKey('login_icon_button'),
           onTap: () {
             Navigator.push(
               context,
