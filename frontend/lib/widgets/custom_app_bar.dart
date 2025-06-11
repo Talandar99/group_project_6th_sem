@@ -100,6 +100,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   Widget goBack(BuildContext context, bool allowBack) {
     if (allowBack) {
       return GestureDetector(
+        key: const ValueKey('go_back'),
         onTap: () {
           Navigator.maybePop(context);
         },
@@ -136,7 +137,6 @@ Future<List<Widget>> getActions(
     if (apiToken.length > 1) {
       return [
         GestureDetector(
-			
           onTap: () {
             Navigator.push(
               context,
@@ -176,7 +176,7 @@ Future<List<Widget>> getActions(
     } else {
       return [
         GestureDetector(
-		  key: const ValueKey('login_icon_button'),
+          key: const ValueKey('login_icon_button'),
           onTap: () {
             Navigator.push(
               context,
