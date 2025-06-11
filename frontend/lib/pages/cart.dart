@@ -206,6 +206,7 @@ class _CartPageState extends State<CartPage> {
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
+                          key: const ValueKey('order_for_button'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
                             shape: RoundedRectangleBorder(

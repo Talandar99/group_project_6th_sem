@@ -155,6 +155,7 @@ Future<List<Widget>> getActions(
           ),
         ),
         GestureDetector(
+		  key: const ValueKey('cart_icon_button'),
           onTap: () {
             Navigator.push(
               context,
