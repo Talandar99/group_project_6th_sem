@@ -36,6 +36,7 @@ class PaymentsPage extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               ElevatedButton.icon(
+                key: const ValueKey('pay_button'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   minimumSize: const Size(double.infinity, 50),
