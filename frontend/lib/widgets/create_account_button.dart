@@ -11,6 +11,7 @@ class CreateAccountButton extends StatelessWidget {
       width: double.infinity,
       height: 50,
       child: OutlinedButton(
+		key: const ValueKey('create_account_button'),
         onPressed: () {
           Navigator.push(
             context,
